@@ -1,0 +1,1 @@
+﻿const fs = require('fs'); const code = fs.readFileSync('./data.js','utf8'); const lines = code.split('\n'); lines.forEach((l,i)=>{ if(l.includes('Bonne nuit') || l.includes('/bɔn.nɥi/') || l.includes('Although') || l.includes('aʊθ') ) console.log(i+1, l.substring(0,120)) });
