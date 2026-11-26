@@ -1,0 +1,41 @@
+SOLUCION COMPLETA - LinguaCraft La Ronda 2
+
+FECHA: 25 de noviembre de 2026
+
+PROBLEMAS RESUELTOS:
+
+1. Minijuego "Ordenar Oraciones" no cargaba
+   - ARCHIVO: features.js
+   - SOLUCION: Auto-activacion en DOMContentLoaded
+   - Cambios:
+     * Panel sentenceBuilderPanel ahora se inserta y muestra automaticamente
+     * Funcion startGame() llamada despues de 100ms delay
+     * Boton "Abrir Minijuego Ordenar Oraciones" removido del HTML
+   - RESULTADO: Minijuego carga automaticamente al entrar a la pagina
+
+2. Lecciones no mostraban informacion en los modulos
+   - ARCHIVO: data.js - Agregado modulo 4 a los 5 cursos gratuitos
+     * Ingles: "Uso real y cultura anglófona"
+     * Japon: "Uso real y cultura"
+     * Coreano: "Uso real y cultura"
+     * Frances: "Uso real y cultura"
+     * Nahuatl: "Uso real y cultura"
+   - ARCHIVO: app.js - Agregada logica de fallback
+     * renderCourseViewModule ahora usa course.modules4 como respaldo
+     * Actualizado el calculo de isLast para considerar ambos arrays
+   - RESULTADO: Al iniciar una leccion, todos los modulos (1-4) muestran contenido
+
+ARCHIVOS MODIFICADOS:
+- features.js: Auto-activacion minijuego
+- data.js: Modulos 4 agregados a los 5 cursos
+- app.js: Logica de fallback para modules4
+
+VERIFICACION:
+- features.js: Minijuego auto-activado OK
+- data.js: Los 5 cursos tienen Módulo 4 OK
+- app.js: Lógica de fallback modules4 OK
+
+USUARIO FINAL:
+- Al abrir LinguaCraft, el minijuego "Ordenar Oraciones" aparece solo
+- Al seleccionar un curso y clic en "iniciar leccion", ven todos los modulos
+- Ya no es necesario hacer clic en el boton del minijuego

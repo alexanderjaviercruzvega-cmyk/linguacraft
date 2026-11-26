@@ -19,21 +19,41 @@
      id: "en", name: "Inglés", flag: "🇬🇧", tag: "Global",
      speech: "en-US", fallback: null, mymemory: "en",
      tagline: "El idioma de los negocios y el internet",
+     speakers: "1 500 millones",
+     countries: "59 países oficiales",
+     difficulty: "Fácil",
+     difficultyStars: 2,
+     family: "Germánica occidental",
+     script: "Alfabeto latino",
+     curiosity: "El inglés toma prestadas palabras de más de 350 idiomas distintos. Aproximadamente el 30 % de su vocabulario proviene del francés, otro 30 % del latín clásico y el resto de raíces germánicas y otros orígenes.",
      phrases: [
-       { term: "Nice to meet you", romaji: "/naɪs tə miːt juː/", meaning: "Encantado de conocerte" },
-       { term: "How much is it?", romaji: "/haʊ mʌtʃ ɪz ɪt/", meaning: "¿Cuánto cuesta?" },
-       { term: "Could you help me?", romaji: "/kʊd juː help miː/", meaning: "¿Podrías ayudarme?" },
+       { term: "Nice to meet you",         romaji: "/naɪs tə miːt juː/",    meaning: "Encantado de conocerte" },
+       { term: "How much is it?",           romaji: "/haʊ mʌtʃ ɪz ɪt/",     meaning: "¿Cuánto cuesta?" },
+       { term: "Could you help me?",        romaji: "/kʊd juː help miː/",    meaning: "¿Podrías ayudarme?" },
+       { term: "I don't understand",        romaji: "/aɪ doʊnt ʌndəˈstænd/",meaning: "No entiendo" },
+       { term: "Where is the bathroom?",    romaji: "/weər ɪz ðə ˈbɑːθruːm/",meaning: "¿Dónde está el baño?" },
+       { term: "Have a nice day!",          romaji: "/hæv ə naɪs deɪ/",     meaning: "¡Que tengas un buen día!" },
      ],
-     cultural: "Con más de 1.500 millones de hablantes, el inglés funciona como lingua franca en ciencia, aviación y tecnología. No existe un único inglés «correcto»: el británico, el estadounidense y el australiano conviven, y la claridad pesa más que el acento.",
+     cultural: "Con más de 1 500 millones de hablantes, el inglés funciona como lingua franca en ciencia, aviación y tecnología. No existe un único inglés «correcto»: el británico, el estadounidense y el australiano conviven, y la claridad pesa más que el acento.",
    },
    {
      id: "ja", name: "Japonés", flag: "🇯🇵", tag: "Cortesía",
      speech: "ja-JP", fallback: null, mymemory: "ja",
      tagline: "Precisión, honoríficos y tres escrituras",
+     speakers: "125 millones",
+     countries: "1 país oficial (Japón)",
+     difficulty: "Muy difícil",
+     difficultyStars: 5,
+     family: "Japónica",
+     script: "Hiragana · Katakana · Kanji",
+     curiosity: "El japonés utiliza tres sistemas de escritura simultáneamente en un mismo texto: hiragana (sílabas nativas), katakana (palabras extranjeras) y kanji (caracteres chinos adaptados). Un periódico japonés promedio usa los tres en la misma página.",
      phrases: [
-       { term: "こんにちは", romaji: "Konnichiwa", meaning: 'Hola / Buenas tardes' },
+       { term: "こんにちは",           romaji: "Konnichiwa",         meaning: "Hola / Buenas tardes" },
        { term: "ありがとうございます", romaji: "Arigatou gozaimasu", meaning: "Muchas gracias (formal)" },
-       { term: "お願いします", romaji: "Onegaishimasu", meaning: "Por favor (al pedir algo)" },
+       { term: "お願いします",         romaji: "Onegaishimasu",      meaning: "Por favor (al pedir algo)" },
+       { term: "すみません",           romaji: "Sumimasen",          meaning: "Disculpe / Perdón" },
+       { term: "おはようございます",   romaji: "Ohayou gozaimasu",   meaning: "Buenos días (formal)" },
+       { term: "いただきます",         romaji: "Itadakimasu",        meaning: "Buen provecho (antes de comer)" },
      ],
      cultural: "El japonés ordena la frase distinto: el verbo va al final y el nivel de cortesía cambia la conjugación completa. Conviven tres escrituras —hiragana, katakana y kanji— dentro de un mismo texto, algo que en español no tiene equivalente.",
    },
@@ -41,10 +61,20 @@
      id: "ko", name: "Coreano", flag: "🇰🇷", tag: "Hangul",
      speech: "ko-KR", fallback: null, mymemory: "ko",
      tagline: "Un alfabeto lógico y honoríficos por edad",
+     speakers: "80 millones",
+     countries: "2 países oficiales (Corea del Sur y del Norte)",
+     difficulty: "Difícil",
+     difficultyStars: 4,
+     family: "Koreánica",
+     script: "Hangul (alfabeto silábico)",
+     curiosity: "El Hangul fue diseñado en 1443 por el rey Sejong el Grande con el objetivo explícito de ser fácil de aprender. Cada letra imita la posición de la boca y la lengua al pronunciar el sonido correspondiente. Se puede aprender a leer en menos de un día.",
      phrases: [
-       { term: "안녕하세요", romaji: "Annyeonghaseyo", meaning: "Hola (cortés)" },
-       { term: "감사합니다", romaji: "Gamsahamnida", meaning: "Gracias (formal)" },
-       { term: "맛있어요", romaji: "Masiisseoyo", meaning: "Está delicioso" },
+       { term: "안녕하세요",   romaji: "Annyeonghaseyo", meaning: "Hola (cortés)" },
+       { term: "감사합니다",   romaji: "Gamsahamnida",   meaning: "Gracias (formal)" },
+       { term: "맛있어요",    romaji: "Masiisseoyo",     meaning: "Está delicioso" },
+       { term: "화이팅!",     romaji: "Hwaiting!",       meaning: "¡Ánimo! / ¡Tú puedes!" },
+       { term: "사랑해요",    romaji: "Saranghaeyo",     meaning: "Te quiero" },
+       { term: "잘 지내세요?", romaji: "Jal jinaeseyo?",  meaning: "¿Cómo está usted?" },
      ],
      cultural: "El Hangul (한글) es uno de los alfabetos más científicos del mundo: se aprende a leer en pocas horas porque sus letras imitan la forma de la boca al hablar. Además, la edad determina el nivel de habla, por eso la primera pregunta suele ser «¿cuántos años tienes?».",
    },
@@ -52,10 +82,20 @@
      id: "fr", name: "Francés", flag: "🇫🇷", tag: "Elegancia",
      speech: "fr-FR", fallback: null, mymemory: "fr",
      tagline: "El idioma de las liaison y la diplomacia",
+     speakers: "320 millones",
+     countries: "29 países oficiales",
+     difficulty: "Intermedio",
+     difficultyStars: 3,
+     family: "Romance (latina)",
+     script: "Alfabeto latino con diacríticos",
+     curiosity: "El francés fue el idioma diplomático global durante más de tres siglos (siglos XVII–XX). Hoy es idioma oficial de la ONU, la UE, la OTAN, el COI y más de 25 organizaciones internacionales. Se habla en cinco continentes.",
      phrases: [
-       { term: "Bonjour", romaji: "/bɔ̃.ʒuʁ/", meaning: "Hola / Buenos días" },
-       { term: "Merci beaucoup", romaji: "/mɛʁ.si bo.ku/", meaning: "Muchas gracias" },
-       { term: "Ça marche", romaji: "/sa maʁʃ/", meaning: "De acuerdo / Funciona" },
+       { term: "Bonjour",              romaji: "/bɔ̃.ʒuʁ/",        meaning: "Hola / Buenos días" },
+       { term: "Merci beaucoup",       romaji: "/mɛʁ.si bo.ku/",   meaning: "Muchas gracias" },
+       { term: "Ça marche",            romaji: "/sa maʁʃ/",        meaning: "De acuerdo / Funciona" },
+       { term: "S'il vous plaît",      romaji: "/sil vu plɛ/",     meaning: "Por favor" },
+       { term: "Je ne comprends pas",  romaji: "/ʒə nə kɔ̃.pʁɑ̃ pa/", meaning: "No entiendo" },
+       { term: "Enchanté(e)",          romaji: "/ɑ̃.ʃɑ̃.te/",       meaning: "Encantado/a de conocerte" },
      ],
      cultural: "En Francia, entrar a una tienda sin decir «bonjour» se considera descortés: el saludo es la puerta de entrada a cualquier interacción. Las comidas son un ritual social, y por eso «bon appétit» se dice siempre antes de empezar a comer.",
    },
@@ -63,10 +103,20 @@
      id: "de", name: "Alemán", flag: "🇩🇪", tag: "Precisión",
      speech: "de-DE", fallback: null, mymemory: "de",
      tagline: "Palabras compuestas y orden lógico",
+     speakers: "100 millones",
+     countries: "6 países oficiales",
+     difficulty: "Difícil",
+     difficultyStars: 4,
+     family: "Germánica occidental",
+     script: "Alfabeto latino + ä, ö, ü, ß",
+     curiosity: "El alemán puede crear palabras compuestas de longitud casi ilimitada. La palabra 'Rindfleischetikettierungsüberwachungsaufgabenübertragungsgesetz' (63 letras) fue una ley real alemana sobre el etiquetado de carne de vaca, en vigor hasta 2013.",
      phrases: [
-       { term: "Guten Tag", romaji: "/ˈɡuːtn̩ taːk/", meaning: "Buenos días" },
-       { term: "Danke schön", romaji: "/ˈdaŋkə ʃøːn/", meaning: "Muchas gracias" },
-       { term: "Wie geht's?", romaji: "/viː ɡeːts/", meaning: "¿Cómo estás?" },
+       { term: "Guten Tag",          romaji: "/ˈɡuːtn̩ taːk/",   meaning: "Buenos días" },
+       { term: "Danke schön",        romaji: "/ˈdaŋkə ʃøːn/",   meaning: "Muchas gracias" },
+       { term: "Wie geht's?",        romaji: "/viː ɡeːts/",      meaning: "¿Cómo estás?" },
+       { term: "Entschuldigung",     romaji: "/ɛntˈʃʊldɪɡʊŋ/",  meaning: "Disculpe / Perdón" },
+       { term: "Ich verstehe nicht", romaji: "/ɪç fɛɐ̯ˈʃteːə nɪçt/", meaning: "No entiendo" },
+       { term: "Auf Wiedersehen",    romaji: "/aʊf ˈviːdɐˌzeːən/", meaning: "Hasta la vista / Adiós" },
      ],
      cultural: "El alemán construye palabras como piezas de Lego: «Handschuh» (guante) es literalmente «zapato de mano». También usa cuatro casos gramaticales que cambian los artículos, lo que exige pensar la frase completa antes de hablar.",
    },
@@ -74,10 +124,20 @@
      id: "it", name: "Italiano", flag: "🇮🇹", tag: "Melodía",
      speech: "it-IT", fallback: null, mymemory: "it",
      tagline: "Ritmo, gestos y dolce vita",
+     speakers: "85 millones",
+     countries: "4 países oficiales",
+     difficulty: "Fácil-Intermedio",
+     difficultyStars: 2,
+     family: "Romance (latina)",
+     script: "Alfabeto latino",
+     curiosity: "El italiano es el idioma más cercano al latín de todas las lenguas romances. Es además la lengua oficial de la música clásica: términos como piano, forte, allegro, soprano, aria y tutti son italiano y se usan en partituras de todo el mundo.",
      phrases: [
-       { term: "Buongiorno", romaji: "/bwonˈdʒorno/", meaning: "Buenos días" },
-       { term: "Che bello!", romaji: "/ke ˈbɛllo/", meaning: "¡Qué bonito!" },
-       { term: "In bocca al lupo", romaji: "/in ˈbokka al ˈlupo/", meaning: "¡Mucha suerte!" },
+       { term: "Buongiorno",        romaji: "/bwonˈdʒorno/",         meaning: "Buenos días" },
+       { term: "Che bello!",        romaji: "/ke ˈbɛllo/",           meaning: "¡Qué bonito!" },
+       { term: "In bocca al lupo",  romaji: "/in ˈbokka al ˈlupo/",  meaning: "¡Mucha suerte!" },
+       { term: "Grazie mille",      romaji: "/ˈɡrattsjɛ ˈmille/",    meaning: "Muchísimas gracias" },
+       { term: "Per favore",        romaji: "/per faˈvoːre/",         meaning: "Por favor" },
+       { term: "Prego",             romaji: "/ˈprɛːɡo/",             meaning: "De nada / Por favor / Adelante" },
      ],
      cultural: "El italiano se apoya tanto en el ritmo como en los gestos: los hablantes nativos acompañan la frase con las manos casi de forma automática. La mayoría de las palabras terminan en vocal, lo que le da esa musicalidad tan reconocible.",
    },
@@ -85,10 +145,20 @@
      id: "pt", name: "Portugués", flag: "🇵🇹", tag: "Saudade",
      speech: "pt-BR", fallback: null, mymemory: "pt",
      tagline: "Nasales suaves y alma brasileña",
+     speakers: "260 millones",
+     countries: "9 países oficiales",
+     difficulty: "Fácil-Intermedio",
+     difficultyStars: 2,
+     family: "Romance (latina)",
+     script: "Alfabeto latino con diacríticos",
+     curiosity: "La palabra 'saudade' (melancolía nostálgica por algo o alguien amado) no tiene traducción exacta en ningún otro idioma, y es considerada parte del alma cultural portuguesa y brasileña. Los lingüistas la llaman una 'palabra intraducible'.",
      phrases: [
-       { term: "Obrigado / Obrigada", romaji: "/obɾiˈɡadu/", meaning: "Gracias (masc. / fem.)" },
-       { term: "Tudo bem?", romaji: "/ˈtudu bẽj/", meaning: "¿Todo bien?" },
-       { term: "Fica à vontade", romaji: "/ˈfikɐ a Võˈtadʒi/", meaning: "Ponte cómodo" },
+       { term: "Obrigado / Obrigada", romaji: "/obɾiˈɡadu/",    meaning: "Gracias (masc. / fem.)" },
+       { term: "Tudo bem?",           romaji: "/ˈtudu bẽj/",    meaning: "¿Todo bien?" },
+       { term: "Fica à vontade",      romaji: "/ˈfikɐ a võˈtadʒi/", meaning: "Ponte cómodo" },
+       { term: "Com licença",         romaji: "/kõ liˈsẽsɐ/",   meaning: "Con permiso" },
+       { term: "Não entendo",         romaji: "/nɐ̃w̃ ẽˈtẽdu/",  meaning: "No entiendo" },
+       { term: "Até logo",            romaji: "/aˈtɛ ˈloɡu/",   meaning: "Hasta luego" },
      ],
      cultural: "El portugués está lleno de sonidos nasales que se producen sin cerrar del todo la boca, algo que cuesta al principio. Brasil y Portugal comparten la lengua pero difieren en pronunciación y vocabulario, como ocurre entre el español de México y el de España.",
    },
@@ -96,21 +166,41 @@
      id: "zh", name: "Chino Mandarín", flag: "🇨🇳", tag: "Tonos",
      speech: "zh-CN", fallback: null, mymemory: "zh-CN",
      tagline: "Cinco tonos que cambian el significado",
+     speakers: "920 millones (nativos)",
+     countries: "5 países oficiales",
+     difficulty: "Muy difícil",
+     difficultyStars: 5,
+     family: "Sino-tibetana",
+     script: "Caracteres chinos + Pinyin",
+     curiosity: "El chino mandarín es el idioma con más hablantes nativos del mundo. Para leer un periódico se necesitan conocer al menos 2 500 caracteres; para ser considerado culto, 5 000. Sin embargo, el sistema de tonos se domina más rápido de lo que parece con práctica constante.",
      phrases: [
-       { term: "你好", romaji: "Nǐ hǎo", meaning: "Hola" },
-       { term: "谢谢", romaji: "Xièxie", meaning: "Gracias" },
-       { term: "不客气", romaji: "Bú kèqi", meaning: "De nada" },
+       { term: "你好",    romaji: "Nǐ hǎo",    meaning: "Hola" },
+       { term: "谢谢",    romaji: "Xièxie",    meaning: "Gracias" },
+       { term: "不客气",  romaji: "Bú kèqi",   meaning: "De nada" },
+       { term: "对不起",  romaji: "Duìbuqǐ",   meaning: "Lo siento / Perdón" },
+       { term: "我不懂",  romaji: "Wǒ bù dǒng", meaning: "No entiendo" },
+       { term: "再见",    romaji: "Zàijiàn",   meaning: "Adiós / Hasta luego" },
      ],
-     cultural: "El mandarín es tonal: la misma sílaba «ma» puede significar «mamá», «cábala», «caballo» o «regañar» según el tono. No usa alfabeto, sino caracteres, y el pinyin con marcas (ā, á, ǎ, à) sirve de apoyo para estudiantes.",
+     cultural: "El mandarín es tonal: la misma sílaba «ma» puede significar «mamá», «cáñamo», «caballo» o «regañar» según el tono. No usa alfabeto, sino caracteres, y el pinyin con marcas (ā, á, ǎ, à) sirve de apoyo para estudiantes.",
    },
    {
      id: "nah", name: "Náhuatl", flag: "🇲🇽", tag: "Herencia",
      speech: "nah", fallback: "es-MX", mymemory: null,
      tagline: "La lengua viva de Mesoamérica",
+     speakers: "1.7 millones",
+     countries: "México (reconocido legalmente)",
+     difficulty: "Muy difícil",
+     difficultyStars: 5,
+     family: "Uto-azteca",
+     script: "Alfabeto latino adaptado",
+     curiosity: "El náhuatl aportó al español más de 200 palabras de uso cotidiano: chocolate, tomate, aguacate, chile, cacahuate, copal, petate y muchas más. La Academia Mexicana de la Lengua documenta y protege activamente este aporte lingüístico.",
      phrases: [
-       { term: "Niltze", romaji: "nil-tze", meaning: "Hola" },
-       { term: "Tlazohcamati", romaji: "tla-zoh-ca-ma-ti", meaning: "Gracias" },
+       { term: "Niltze",         romaji: "nil-tze",          meaning: "Hola" },
+       { term: "Tlazohcamati",   romaji: "tla-zoh-ca-ma-ti", meaning: "Gracias" },
        { term: "Cualli tonalli", romaji: "cua-lli to-nal-li", meaning: "Buenos días" },
+       { term: "Macehualli",     romaji: "ma-ce-hua-lli",    meaning: "Persona / Ser humano" },
+       { term: "Xocolatl",       romaji: "sho-ko-latl",      meaning: "Chocolate" },
+       { term: "Tlalli",         romaji: "tla-lli",          meaning: "Tierra / Suelo" },
      ],
      cultural: "El náhuatl sigue vivo: cerca de 1,7 millones de personas lo hablan en México, con variantes regionales tan distintas como los dialectos del árabe. Muchas palabras del español vienen de aquí: chocolate (xocolatl), tomate (tomatl) y aguacate (ahuacatl).",
    },
@@ -118,10 +208,20 @@
      id: "la", name: "Latín", flag: "🏛️", tag: "Raíz",
      speech: "la", fallback: "it-IT", mymemory: null,
      tagline: "La lengua madre del romance",
+     speakers: "~1 000 hablantes activos",
+     countries: "Vaticano (único país oficial)",
+     difficulty: "Muy difícil",
+     difficultyStars: 5,
+     family: "Itálica (indo-europea)",
+     script: "Alfabeto latino clásico",
+     curiosity: "El latín es el único idioma 'muerto' que tiene un país que lo usa como oficial: el Vaticano. Además, el latín sigue evolucionando: en 2017 se crearon términos latinos oficiales para 'selfie' (imago sui ipsius), 'internet' (interrete) y 'smartphone' (telephonium alare).",
      phrases: [
-       { term: "Carpe diem", romaji: "car-pe di-em", meaning: "Aprovecha el día" },
-       { term: "Veni, vidi, vici", romaji: "ve-ni vi-di vi-ci", meaning: "Vine, vi, vencí" },
-       { term: "Gratias tibi ago", romaji: "gra-ti-as ti-bi a-go", meaning: "Te doy las gracias" },
+       { term: "Carpe diem",         romaji: "car-pe di-em",         meaning: "Aprovecha el día" },
+       { term: "Veni, vidi, vici",    romaji: "ve-ni vi-di vi-ci",    meaning: "Vine, vi, vencí" },
+       { term: "Gratias tibi ago",    romaji: "gra-tias ti-bi a-go",  meaning: "Te doy las gracias" },
+       { term: "Salve",               romaji: "sal-ve",               meaning: "Hola / Salud" },
+       { term: "Vale",                romaji: "va-le",                meaning: "Adiós / Cuídate" },
+       { term: "Amor vincit omnia",   romaji: "a-mor vin-cit om-nia", meaning: "El amor lo conquista todo" },
      ],
      cultural: "El latín no está muerto: es el ancestro del español, portugués, francés, italiano y rumano, y sigue siendo el idioma oficial del Vaticano. Aprenderlo hace visible la lógica de la gramática romance, porque explica de dónde vienen los casos y las conjugaciones actuales.",
    },
@@ -149,8 +249,8 @@
      level: "Básico", tag: "free",
      cover: "linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%)",
      duration: "6 semanas",
-     desc: "Lo esencial para viajar y hacerte entender en cualquier país de habla inglesa desde el primer día. Este curso cubre las situaciones más comunes que enfrentarás al viajar: saludos, transporte, alojamiento y comida. Al completarlo, podrás sobrevivir en situaciones básicas de supervivencia en un país anglosajón.",
-     syllabus: ["Módulo 1 · Saludos y presentaciones", "Módulo 2 · Aeropuerto y hotel", "Módulo 3 · Comida y direcciones"],
+     desc: "Lo esencial para viajar y hacerte entender en cualquier país de habla inglesa desde el primer día. Aprenderás a pronunciar correctamente, entender la gramática básica, manejar vocabulario de situaciones reales y desenvolverte en conversaciones cotidianas.",
+     syllabus: ["Módulo 1 · Fonética y pronunciación", "Módulo 2 · Gramática esencial", "Módulo 3 · Vocabulario de supervivencia", "Módulo 4 · Uso real y cultura anglófona"],
      modules: [
        { 
          title: "Módulo 1 · Saludos y presentaciones", 
@@ -182,7 +282,19 @@
            "En restaurantes anglosajones se deja propina del 15-20%."
          ] 
        },
-     ],
+        { 
+          title: "Módulo 4 · Uso real y cultura anglófona", 
+          summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+          points: [
+            "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+            "El uso de «please» y « thank you » en situaciones cotidianas.",
+            "Diferencias entre inglés británico y americano en vocabulario común.",
+            "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+            "Normas de cortesía en pubs y restaurantes británicos.",
+            "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+          ] 
+        },
+      ],
      vocab: [
        { term: "Nice to meet you", romaji: "/naɪs tə miːt juː/", meaning: "Encantado de conocerte", lang: "en-US" },
        { term: "How much is it?", romaji: "/haʊ mʌtʃ ɪz ɪt/", meaning: "¿Cuánto cuesta?", lang: "en-US" },
@@ -196,16 +308,19 @@
        { term: "Excuse me", romaji: "/ɪkˈskjuːz miː/", meaning: "Con permiso", lang: "en-US" },
        { term: "Have a nice day", romaji: "/hæv ə naɪsdeɪ/", meaning: "Que tenga buen día", lang: "en-US" },
        { term: "What time is it?", romaji: "/wɔːt taɪm ɪz ɪt/", meaning: "¿Qué hora es?", lang: "en-US" },
+     { term: "Turn left/right", romaji: "/tɜːrn lɛft / raɪt/", meaning: "Gire a la izquierda/derecha", lang: "en-US" },
+     { term: "Go straight", romaji: "/ɡoʊ streɪt/", meaning: "Siga recto", lang: "en-US" },
+     { term: "It's on the right", romaji: "/ɪts ɒn ðə raɪt/", meaning: "Está a la derecha", lang: "en-US" },
      ],
      dialogue: [
        { who: "Turista", line: "Excuse me, where is the train station?", tr: "Disculpe, ¿dónde está la estación de tren?" },
        { who: "Local", line: "Go straight and turn left at the corner.", tr: "Siga recto y gire a la izquierda en la esquina." },
        { who: "Turista", line: "Thank you so much! And how much is a ticket?", tr: "¡Muchas gracias! ¿Y cuánto cuesta un boleto?" },
        { who: "Local", line: "It's two dollars. Have a nice day!", tr: "Son dos dólares. ¡Que tenga buen día!" },
-       { who: "Turista", line: "I'm sorry, I don't understand. Could you speak more slowly?", tr: "Lo siento, no entiendo. ¿Habla más despacio?" },
+       
        { who: "Local", line: "Sure, it's around the corner. Two blocks and you'll see it.", tr: "Sí, es alrededor de la esquina. Dos cuadras y lo verá." },
      ],
-     cultural: "En los países anglosajones el «small talk» —charla breve sobre el clima, el tráfico o el fin de semana— es una norma social, no una pérdida de tiempo. Ignorar un «How are you?» puede parecer frío, aunque nadie espere una respuesta larga: basta con un «Good, thanks!». En restaurantes, dejar propina del 15-20% es la norma y no hacerlo puede considerarse grosero. El inglés tiene muchos acentos locales válidos; el objetivo es ser claro, no imitar un acento específico.",
+     cultural: "En los países anglosajones el «small talk» —charla breve sobre el clima, el tráfico o el fin de semana— es una norma social, no una pérdida de tiempo. En los países anglosajones el pequeño talk es una norma social, no una pérdida de tiempo. El inglés tiene muchos acentos locales válidos; el objetivo es ser claro, no imitar un acento específico. Dejar propina del 15-20% en restaurantes de EE.UU. es estándar. Las expresiones coloquiales como 'no worries', 'sounds good' y 'by the way' son el verdadero inglés del día a día. En EE.UU., no dejar propina puede ofender seriamente al mesero, ya que los meseros dependen de ella como parte principal de su ingreso.",
    },
    {
      id: "jp-viajeros",
@@ -215,7 +330,7 @@
      cover: "linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%)",
      duration: "6 semanas",
      desc: "Frases esenciales para disfrutar tu primer viaje a Japón: transporte, comida y cortesía. Aprende las fórmulas mágicas que todo visitante debe conocer.",
-     syllabus: ["Módulo 1 · Saludos y cortesía", "Módulo 2 · Moverte por la ciudad", "Módulo 3 · Comer y comprar"],
+     syllabus: ["Módulo 1 · Saludos y cortesía", "Módulo 2 · Moverte por la ciudad", "Módulo 3 · Comer y comprar", "Módulo 4 · Uso real y cultura"],
      modules: [
        { 
          title: "Módulo 1 · Saludos y cortesía", 
@@ -248,7 +363,22 @@
          ] 
        },
      ],
-     vocab: [
+     // Módulo 4 adicional para completar el syllabus de 4 módulos
+     modules4: [
+       { 
+         title: "Módulo 4 · Uso real y cultura anglófona", 
+         summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+         points: [
+           "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+           "El uso de «please» y « thank you » en situaciones cotidianas.",
+           "Diferencias entre inglés británico y americano en vocabulario común.",
+           "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+           "Normas de cortesía en pubs y restaurantes británicos.",
+           "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+         ]
+        },
+      ],
+      vocab: [
        { term: "こんにちは", romaji: "Konnichiwa", meaning: 'Hola / Buenas tardes', lang: "ja-JP" },
        { term: "ありがとう", romaji: "Arigatou", meaning: "Gracias", lang: "ja-JP" },
        { term: "すみません", romaji: "Sumimasen", meaning: "Disculpe / Perdón", lang: "ja-JP" },
@@ -313,7 +443,22 @@
          ] 
        },
      ],
-     vocab: [
+     // Módulo 4 adicional para completar el syllabus de 4 módulos
+     modules4: [
+       { 
+         title: "Módulo 4 · Uso real y cultura anglófona", 
+         summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+         points: [
+           "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+           "El uso de «please» y « thank you » en situaciones cotidianas.",
+           "Diferencias entre inglés británico y americano en vocabulario común.",
+           "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+           "Normas de cortesía en pubs y restaurantes británicos.",
+           "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+         ]
+        },
+      ],
+      vocab: [
        { term: "안녕하세요", romaji: "Annyeonghaseyo", meaning: "Hola (cortés)", lang: "ko-KR" },
        { term: "고마워요", romaji: "Gomawoyo", meaning: "Gracias", lang: "ko-KR" },
        { term: "대박", romaji: "Daebak", meaning: "¡Increíble! / ¡Genial!", lang: "ko-KR" },
@@ -345,7 +490,7 @@
      cover: "linear-gradient(135deg, #E0E7FF 0%, #C7D2FE 100%)",
      duration: "6 semanas",
      desc: "Empieza desde cero con el saludo, los números y las frases que usarás todos los días en Francia. El francés es un idioma de elegancia y sutileza.",
-     syllabus: ["Módulo 1 · Saludos y cortesía", "Módulo 2 · Números y compras", "Módulo 3 · Presentarte"],
+     syllabus: ["Módulo 1 · Saludos y cortesía", "Módulo 2 · Números y compras", "Módulo 3 · Presentarte", "Módulo 4 · Uso real y cultura"],
      modules: [
        { 
          title: "Módulo 1 · Saludos y cortesía", 
@@ -378,7 +523,22 @@
          ] 
        },
      ],
-     vocab: [
+     // Módulo 4 adicional para completar el syllabus de 4 módulos
+     modules4: [
+       { 
+         title: "Módulo 4 · Uso real y cultura anglófona", 
+         summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+         points: [
+           "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+           "El uso de «please» y « thank you » en situaciones cotidianas.",
+           "Diferencias entre inglés británico y americano en vocabulario común.",
+           "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+           "Normas de cortesía en pubs y restaurantes británicos.",
+           "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+         ]
+        },
+      ],
+      vocab: [
        { term: "Bonjour", romaji: "/bɔ̃.ʒuʁ/", meaning: "Hola / Buenos días", lang: "fr-FR" },
        { term: "S'il vous plaît", romaji: "/sil vu plɛ/", meaning: "Por favor", lang: "fr-FR" },
        { term: "Merci beaucoup", romaji: "/mɛʁ.si bo.ku/", meaning: "Muchas gracias", lang: "fr-FR" },
@@ -410,7 +570,7 @@
      cover: "linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)",
      duration: "5 semanas",
      desc: "Descubre la lengua originaria que sigue viva en México y que prestó cientos de palabras al español. Conecta tu español con sus raíces mesoamericanas.",
-     syllabus: ["Módulo 1 · Saludos y sonidos", "Módulo 2 · Palabras que ya usas", "Módulo 3 · Cosmovisión y cultura"],
+     syllabus: ["Módulo 1 · Saludos y sonidos", "Módulo 2 · Palabras que ya usas", "Módulo 3 · Cosmovisión y cultura", "Módulo 4 · Uso real y cultura"],
      modules: [
        { 
          title: "Módulo 1 · Saludos y sonidos", 
@@ -444,7 +604,22 @@
          ] 
        },
      ],
-     vocab: [
+     // Módulo 4 adicional para completar el syllabus de 4 módulos
+     modules4: [
+       { 
+         title: "Módulo 4 · Uso real y cultura anglófona", 
+         summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+         points: [
+           "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+           "El uso de «please» y « thank you » en situaciones cotidianas.",
+           "Diferencias entre inglés británico y americano en vocabulario común.",
+           "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+           "Normas de cortesía en pubs y restaurantes británicos.",
+           "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+         ]
+        },
+      ],
+      vocab: [
        { term: "Niltze", romaji: "nil-tze", meaning: "Hola", lang: "nah", fallback: "es-MX" },
        { term: "Tlazohcamati", romaji: "tla-zoh-ca-ma-ti", meaning: "Gracias", lang: "nah", fallback: "es-MX" },
        { term: "Cualli tonalli", romaji: "cua-lli to-nal-li", meaning: "Buenos días", lang: "nah", fallback: "es-MX" },
@@ -508,7 +683,22 @@
          ] 
        },
      ],
-     vocab: [
+     // Módulo 4 adicional para completar el syllabus de 4 módulos
+     modules4: [
+       { 
+         title: "Módulo 4 · Uso real y cultura anglófona", 
+         summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+         points: [
+           "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+           "El uso de «please» y « thank you » en situaciones cotidianas.",
+           "Diferencias entre inglés británico y americano en vocabulario común.",
+           "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+           "Normas de cortesía en pubs y restaurantes británicos.",
+           "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+         ]
+        },
+      ],
+      vocab: [
        { term: "Deadline", romaji: "/ˈdedlaɪn/", meaning: "Fecha límite", lang: "en-US" },
        { term: "To follow up", romaji: "/ˈfɒloʊ ʌp/", meaning: "Dar seguimiento", lang: "en-US" },
        { term: "Stakeholder", romaji: "/ˈsteɪkhoʊldər/", meaning: "Parte interesada", lang: "en-US" },
@@ -573,7 +763,22 @@
          ] 
        },
      ],
-     vocab: [
+     // Módulo 4 adicional para completar el syllabus de 4 módulos
+     modules4: [
+       { 
+         title: "Módulo 4 · Uso real y cultura anglófona", 
+         summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+         points: [
+           "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+           "El uso de «please» y « thank you » en situaciones cotidianas.",
+           "Diferencias entre inglés británico y americano en vocabulario común.",
+           "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+           "Normas de cortesía en pubs y restaurantes británicos.",
+           "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+         ]
+        },
+      ],
+      vocab: [
        { term: "Through", romaji: "/θruː/", meaning: "A través de", lang: "en-US" },
        { term: "Thought", romaji: "/θɔːt/", meaning: "Pensamiento / Pensé", lang: "en-US" },
        { term: "Squirrel", romaji: "/ˈskwɪrəl/", meaning: "Ardilla", lang: "en-US" },
@@ -637,7 +842,22 @@
          ] 
        },
      ],
-     vocab: [
+     // Módulo 4 adicional para completar el syllabus de 4 módulos
+     modules4: [
+       { 
+         title: "Módulo 4 · Uso real y cultura anglófona", 
+         summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+         points: [
+           "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+           "El uso de «please» y « thank you » en situaciones cotidianas.",
+           "Diferencias entre inglés británico y americano en vocabulario común.",
+           "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+           "Normas de cortesía en pubs y restaurantes británicos.",
+           "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+         ]
+        },
+      ],
+      vocab: [
        { term: "いらっしゃいます", romaji: "Irasshaimasu", meaning: "Estar / Ir (respetuoso)", lang: "ja-JP" },
        { term: "いただきます", romaji: "Itadakimasu", meaning: "Recibir (humilde) / Buen provecho", lang: "ja-JP" },
        { term: "〜てしまいます", romaji: "-te shimaimasu", meaning: "Terminar por completo / Sin querer", lang: "ja-JP" },
@@ -700,7 +920,22 @@
          ] 
        },
      ],
-     vocab: [
+     // Módulo 4 adicional para completar el syllabus de 4 módulos
+     modules4: [
+       { 
+         title: "Módulo 4 · Uso real y cultura anglófona", 
+         summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+         points: [
+           "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+           "El uso de «please» y « thank you » en situaciones cotidianas.",
+           "Diferencias entre inglés británico y americano en vocabulario común.",
+           "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+           "Normas de cortesía en pubs y restaurantes británicos.",
+           "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+         ]
+        },
+      ],
+      vocab: [
        { term: "선배", romaji: "Seonbae", meaning: "Mayor / Compañero con más experiencia", lang: "ko-KR" },
        { term: "후배", romaji: "Hubae", meaning: "Menor / Compañero con menos experiencia", lang: "ko-KR" },
        { term: "눈치", romaji: "Nunchi", meaning: "Leer el ambiente social", lang: "ko-KR" },
@@ -763,7 +998,22 @@
          ] 
        },
      ],
-     vocab: [
+     // Módulo 4 adicional para completar el syllabus de 4 módulos
+     modules4: [
+       { 
+         title: "Módulo 4 · Uso real y cultura anglófona", 
+         summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+         points: [
+           "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+           "El uso de «please» y « thank you » en situaciones cotidianas.",
+           "Diferencias entre inglés británico y americano en vocabulario común.",
+           "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+           "Normas de cortesía en pubs y restaurantes británicos.",
+           "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+         ]
+        },
+      ],
+      vocab: [
        { term: "Ça marche", romaji: "/sa maʁʃ/", meaning: "De acuerdo / Funciona", lang: "fr-FR" },
        { term: "Nickel", romaji: "/ni.kɛl/", meaning: "Perfecto / Impecable", lang: "fr-FR" },
        { term: "Tu vois ?", romaji: "/ty vwa/", meaning: "¿Ves? / ¿Entiendes?", lang: "fr-FR" },
@@ -827,7 +1077,22 @@
          ] 
        },
      ],
-     vocab: [
+     // Módulo 4 adicional para completar el syllabus de 4 módulos
+     modules4: [
+       { 
+         title: "Módulo 4 · Uso real y cultura anglófona", 
+         summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+         points: [
+           "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+           "El uso de «please» y « thank you » en situaciones cotidianas.",
+           "Diferencias entre inglés británico y americano en vocabulario común.",
+           "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+           "Normas de cortesía en pubs y restaurantes británicos.",
+           "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+         ]
+        },
+      ],
+      vocab: [
        { term: "Guten Tag", romaji: "/ˈɡuːtn̩ taːk/", meaning: "Buenos días", lang: "de-DE" },
        { term: "Danke schön", romaji: "/ˈdaŋkə ʃøːn/", meaning: "Muchas gracias", lang: "de-DE" },
        { term: "Ich heiße…", romaji: "/ɪç ˈhaɪsə/", meaning: "Me llamo…", lang: "de-DE" },
@@ -892,7 +1157,22 @@
          ] 
        },
      ],
-     vocab: [
+     // Módulo 4 adicional para completar el syllabus de 4 módulos
+     modules4: [
+       { 
+         title: "Módulo 4 · Uso real y cultura anglófona", 
+         summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+         points: [
+           "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+           "El uso de «please» y « thank you » en situaciones cotidianas.",
+           "Diferencias entre inglés británico y americano en vocabulario común.",
+           "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+           "Normas de cortesía en pubs y restaurantes británicos.",
+           "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+         ]
+        },
+      ],
+      vocab: [
        { term: "Buongiorno", romaji: "/bwonˈdʒorno/", meaning: "Buenos días", lang: "it-IT" },
        { term: "Un caffè, per favore", romaji: "/un kafˈfɛ per faˈvore/", meaning: "Un café, por favor", lang: "it-IT" },
        { term: "Che bello!", romaji: "/ke ˈbɛllo/", meaning: "¡Qué bonito!", lang: "it-IT" },
@@ -956,7 +1236,22 @@
          ] 
        },
      ],
-     vocab: [
+     // Módulo 4 adicional para completar el syllabus de 4 módulos
+     modules4: [
+       { 
+         title: "Módulo 4 · Uso real y cultura anglófona", 
+         summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+         points: [
+           "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+           "El uso de «please» y « thank you » en situaciones cotidianas.",
+           "Diferencias entre inglés británico y americano en vocabulario común.",
+           "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+           "Normas de cortesía en pubs y restaurantes británicos.",
+           "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+         ]
+        },
+      ],
+      vocab: [
        { term: "Obrigado / Obrigada", romaji: "/obɾiˈɡadu/", meaning: "Gracias (masc. / fem.)", lang: "pt-BR" },
        { term: "Tudo bem?", romaji: "/ˈtudu bẽj/", meaning: "¿Todo bien?", lang: "pt-BR" },
        { term: "Fica à vontade", romaji: "/ˈfikɐ a õˈtadʒi/", meaning: "Ponte cómodo", lang: "pt-BR" },
@@ -1019,7 +1314,22 @@
          ] 
        },
      ],
-     vocab: [
+     // Módulo 4 adicional para completar el syllabus de 4 módulos
+     modules4: [
+       { 
+         title: "Módulo 4 · Uso real y cultura anglófona", 
+         summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+         points: [
+           "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+           "El uso de «please» y « thank you » en situaciones cotidianas.",
+           "Diferencias entre inglés británico y americano en vocabulario común.",
+           "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+           "Normas de cortesía en pubs y restaurantes británicos.",
+           "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+         ]
+        },
+      ],
+      vocab: [
        { term: "你好", romaji: "Nǐ hǎo", meaning: "Hola", lang: "zh-CN" },
        { term: "谢谢", romaji: "Xièxie", meaning: "Gracias", lang: "zh-CN" },
        { term: "不客气", romaji: "Bú kèqi", meaning: "De nada", lang: "zh-CN" },
@@ -1083,7 +1393,22 @@
          ] 
        },
      ],
-     vocab: [
+     // Módulo 4 adicional para completar el syllabus de 4 módulos
+     modules4: [
+       { 
+         title: "Módulo 4 · Uso real y cultura anglófona", 
+         summary: "Small talk, normas sociales y expresiones cotidianas para comunicarse naturalmente. Reglas de orden de palabras comparadas con el español.", 
+         points: [
+           "El pequeño talk es esencial en países anglosajones: hablar del clima, el fin de semana o el trabajo es una norma social.",
+           "El uso de «please» y « thank you » en situaciones cotidianas.",
+           "Diferencias entre inglés británico y americano en vocabulario común.",
+           "Expresiones idiomáticas: «break a leg», «cost an arm and a leg», «when pigs fly».",
+           "Normas de cortesía en pubs y restaurantes británicos.",
+           "Vocabulario de uso frecuente: «cheers», «sorry», «excuse me», «my pleasure»."
+         ]
+        },
+      ],
+      vocab: [
        { term: "Carpe diem", romaji: "car-pe di-em", meaning: "Aprovecha el día", lang: "la", fallback: "it-IT" },
        { term: "Veni, vidi, vici", romaji: "ve-ni vi-di vi-ci", meaning: "Vine, vi, vencí", lang: "la", fallback: "it-IT" },
        { term: "Gratias tibi ago", romaji: "gra-ti-as ti-bi a-go", meaning: "Te doy las gracias", lang: "la", fallback: "it-IT" },

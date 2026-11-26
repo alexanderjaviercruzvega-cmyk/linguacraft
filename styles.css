@@ -543,6 +543,92 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size:
 .lang-note { display: flex; align-items: center; gap: 7px; font-size: .74rem; color: var(--muted-2); }
 .lang-note svg { width: 14px; height: 14px; }
 
+/* Nuevos estilos: stats, dificultad, curiosidad, footer, modal de cursos del idioma */
+.lang-stats {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;
+}
+.lang-stat {
+  display: flex; align-items: center; gap: 7px;
+  font-size: .76rem; color: var(--ink-soft);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 7px 10px;
+}
+.lang-stat svg { width: 13px; height: 13px; color: var(--primary); flex: none; }
+.lang-stat:first-child { grid-column: 1 / -1; }
+
+.lang-difficulty {
+  display: flex; align-items: center; gap: 8px;
+  font-size: .78rem; margin-bottom: 8px;
+}
+.diff-label { color: var(--muted); font-weight: 600; }
+.diff-stars { letter-spacing: 2px; }
+.diff-star { color: var(--border-strong); font-size: .9rem; }
+.diff-star.on { color: var(--amber); }
+.diff-text { color: var(--muted); }
+
+.lang-curiosity {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 11px 13px; margin-bottom: 2px;
+  background: var(--amber-soft); border: 1px solid rgba(245,158,11,.3);
+  border-radius: var(--radius-sm);
+  font-size: .81rem; color: var(--ink-soft); line-height: 1.55;
+}
+.lang-curiosity svg { width: 15px; height: 15px; color: var(--amber); flex: none; margin-top: 2px; }
+.lang-curiosity p { margin: 0; }
+
+.lang-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; flex-wrap: wrap; margin-top: 4px;
+  padding-top: 12px; border-top: 1px solid var(--border);
+}
+.lang-footer .lang-note { margin: 0; }
+
+.lang-courses-btn { flex: none; }
+.course-count-pill {
+  display: inline-flex; align-items: center;
+  background: rgba(255,255,255,.25); color: inherit;
+  font-size: .72rem; padding: 1px 7px; border-radius: var(--radius-pill);
+  font-weight: 700; margin-left: 2px;
+}
+.lang-no-courses {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .78rem; color: var(--muted-2); font-style: italic;
+}
+.lang-no-courses svg { width: 14px; height: 14px; }
+
+/* Grid de cursos dentro del modal de idioma */
+.lang-courses-list { display: grid; gap: 18px; }
+.lang-course-item {
+  display: grid; grid-template-columns: 100px 1fr;
+  grid-template-rows: auto auto; gap: 0;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  overflow: hidden; background: var(--card);
+  transition: box-shadow var(--t), border-color var(--t);
+}
+.lang-course-item:hover { box-shadow: var(--shadow-md); border-color: var(--primary); }
+.lang-course-item.is-locked .lci-cover { filter: grayscale(.5); }
+
+.lci-cover {
+  grid-column: 1; grid-row: 1 / 3;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 12px; gap: 8px;
+  position: relative;
+}
+.lci-flag { font-size: 2.4rem; line-height: 1; }
+.lci-cover .course-tag { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+
+.lci-body {
+  grid-column: 2; grid-row: 1;
+  padding: 14px 16px 8px;
+}
+.lci-body h4 { font-size: 1rem; margin: 2px 0 6px; }
+.lci-body p { font-size: .84rem; color: var(--muted); line-height: 1.5; margin: 0; }
+
+.lci-foot {
+  grid-column: 2; grid-row: 2;
+  padding: 0 16px 14px;
+}
+
 /* ----------------------------------------------------------------------------
    9. Tarjetas de curso
    -------------------------------------------------------------------------- */
@@ -1141,6 +1227,335 @@ textarea:focus, input:focus, select:focus { outline: none; border-color: var(--p
 @keyframes toastOut { to { opacity: 0; transform: translateX(40px) scale(.96); } }
 
 /* ----------------------------------------------------------------------------
+   22a. Vista de Curso Completo (course-view)
+   -------------------------------------------------------------------------- */
+
+/* Contenedor principal — ocupa toda la pantalla por encima del layout normal */
+.course-view {
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Topbar fija */
+.cv-topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--nav-bg-solid);
+  backdrop-filter: blur(14px) saturate(160%);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.cv-topbar-inner {
+  display: flex; align-items: center; gap: 16px;
+  height: 64px; flex-wrap: wrap;
+  padding-block: 10px;
+}
+.cv-title-wrap {
+  display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;
+}
+.cv-course-name {
+  font-family: var(--font-display); font-weight: 700; font-size: 1rem;
+  color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cv-course-lang { font-size: .78rem; color: var(--muted); }
+.cv-topbar-actions {
+  display: flex; align-items: center; gap: 10px; flex: none;
+}
+.cv-progress-label { font-size: .78rem; color: var(--muted); white-space: nowrap; }
+.cv-progress-bar-wrap {
+  width: 110px; height: 7px; background: var(--surface-2);
+  border-radius: 999px; overflow: hidden;
+}
+.cv-progress-bar {
+  height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transition: width .4s var(--ease);
+}
+
+/* Tabs de módulos */
+.cv-tabs-wrap {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.cv-tabs {
+  display: flex; gap: 4px; overflow-x: auto; padding: 10px 0;
+  scrollbar-width: none;
+}
+.cv-tabs::-webkit-scrollbar { display: none; }
+
+.cv-tab {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 18px; border: 1px solid var(--border);
+  border-radius: var(--radius); background: var(--card);
+  color: var(--muted); flex: none;
+  font-family: var(--font-display); font-size: .85rem; font-weight: 600;
+  transition: all var(--t-fast); white-space: nowrap; position: relative;
+}
+.cv-tab:hover { border-color: var(--primary); color: var(--primary); }
+.cv-tab.is-active {
+  background: var(--primary); border-color: var(--primary);
+  color: #fff; box-shadow: var(--shadow-primary);
+}
+.cv-tab.is-done { border-color: var(--accent); color: var(--accent-dark); }
+.cv-tab.is-done.is-active { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: var(--shadow-accent); }
+.cv-tab-icon svg { width: 16px; height: 16px; }
+.cv-tab-num { display: block; font-size: .7rem; opacity: .75; }
+.cv-tab-name { display: block; }
+.cv-tab-done-pill {
+  position: absolute; top: -6px; right: -6px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--accent); color: #fff; font-size: .68rem;
+  display: grid; place-items: center; font-weight: 800; border: 2px solid var(--card);
+}
+
+/* Cuerpo del módulo */
+.cv-body {
+  flex: 1; padding-block: 32px 60px;
+}
+
+/* Cabecera del módulo activo */
+.cv-module-header {
+  border-radius: var(--radius-xl); padding: 28px 30px;
+  margin-bottom: 28px;
+  display: flex; flex-direction: column; gap: 8px;
+  position: relative; overflow: hidden;
+}
+.cv-module-header::after {
+  content: ""; position: absolute; inset: 0;
+  background: rgba(255,255,255,.45); pointer-events: none;
+}
+[data-theme="dark"] .cv-module-header::after { background: rgba(0,0,0,.35); }
+.cv-mod-num {
+  font-family: var(--font-display); font-size: .78rem; font-weight: 800;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--primary);
+  position: relative; z-index: 1;
+}
+.cv-mod-title {
+  font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; position: relative; z-index: 1;
+}
+.cv-mod-summary { font-size: .95rem; color: var(--ink-soft); position: relative; z-index: 1; }
+
+/* Secciones del módulo */
+.cv-section {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px 26px; margin-bottom: 20px;
+}
+.cv-section-head {
+  display: flex; align-items: center; gap: 9px;
+  font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--ink);
+  margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border);
+}
+.cv-section-head svg { width: 18px; height: 18px; color: var(--primary); }
+.cv-intro-text { font-size: .97rem; color: var(--ink-soft); line-height: 1.75; }
+.cv-points-list { list-style: none; display: grid; gap: 10px; margin: 0; padding: 0; }
+.cv-points-list li { position: relative; padding-left: 28px; font-size: .95rem; color: var(--ink-soft); line-height: 1.65; }
+.cv-points-list li::before {
+  content: ""; position: absolute; left: 0; top: 0.42em; width: 9px; height: 9px; border-radius: 50%;
+  background: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft);
+}
+
+/* Gramática */
+.cv-grammar-list { display: grid; gap: 16px; }
+.cv-grammar-item {
+  padding: 16px 18px; background: var(--surface);
+  border-left: 4px solid var(--primary); border-radius: 0 var(--radius) var(--radius) 0;
+}
+.cv-grammar-rule { font-family: var(--font-display); font-weight: 700; color: var(--ink); margin-bottom: 8px; font-size: .97rem; }
+.cv-grammar-example {
+  font-size: .9rem; color: var(--ink-soft); background: var(--card);
+  padding: 8px 12px; border-radius: var(--radius-sm); margin: 8px 0;
+}
+.cv-grammar-ex-label { font-weight: 700; color: var(--primary); margin-right: 6px; }
+.cv-grammar-note {
+  display: flex; align-items: flex-start; gap: 7px;
+  font-size: .84rem; color: #92400E; background: var(--amber-soft);
+  padding: 8px 12px; border-radius: var(--radius-sm); margin-top: 8px;
+}
+.cv-grammar-note svg { width: 15px; height: 15px; color: var(--amber); flex: none; margin-top: 2px; }
+.cv-grammar-error {
+  display: flex; align-items: flex-start; gap: 7px;
+  font-size: .84rem; color: #9F1239; background: var(--danger-soft);
+  padding: 8px 12px; border-radius: var(--radius-sm); margin-top: 8px;
+}
+.cv-grammar-error svg { width: 15px; height: 15px; color: var(--danger); flex: none; margin-top: 2px; }
+
+/* Tabla gramatical */
+.cv-table-wrap { overflow-x: auto; margin: 10px 0; }
+.cv-grammar-table {
+  width: 100%; border-collapse: collapse; font-size: .88rem;
+}
+.cv-grammar-table th {
+  background: var(--primary-soft); color: var(--primary-dark);
+  font-family: var(--font-display); font-weight: 700; padding: 8px 12px;
+  text-align: left; border: 1px solid var(--border);
+}
+.cv-grammar-table td {
+  padding: 8px 12px; border: 1px solid var(--border);
+  color: var(--ink-soft); background: var(--card);
+}
+.cv-grammar-table tr:nth-child(even) td { background: var(--surface); }
+
+/* Vocabulario */
+.cv-vocab-list { display: grid; gap: 12px; }
+.cv-vocab-item {
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 12px; align-items: start;
+  padding: 14px 16px; border: 1px solid var(--border);
+  border-radius: var(--radius); background: var(--card);
+  transition: border-color var(--t), box-shadow var(--t);
+}
+.cv-vocab-item:hover { border-color: var(--primary); box-shadow: var(--shadow-sm); }
+.cv-vocab-item.is-learned {
+  border-color: var(--accent); background: var(--accent-soft);
+}
+.cv-vocab-term { font-family: var(--font-display); font-size: 1.08rem; font-weight: 700; color: var(--ink); }
+.cv-vocab-romaji { font-size: .78rem; color: var(--muted); font-style: italic; margin: 2px 0 4px; }
+.cv-vocab-meaning { font-size: .9rem; color: var(--ink-soft); font-weight: 600; }
+.cv-vocab-example {
+  margin-top: 8px; padding: 8px 10px; border-radius: var(--radius-sm);
+  background: var(--surface); border: 1px solid var(--border);
+  font-size: .84rem;
+}
+.cv-vocab-ex-orig { display: block; color: var(--ink); font-weight: 600; }
+.cv-vocab-ex-tr { display: block; color: var(--muted); font-style: italic; margin-top: 2px; }
+
+.cv-vocab-actions {
+  display: flex; flex-direction: column; gap: 6px; align-items: flex-end;
+}
+.cv-vocab-audio-btn {
+  width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border);
+  background: var(--primary-soft); color: var(--primary);
+  display: grid; place-items: center; transition: all var(--t-fast);
+}
+.cv-vocab-audio-btn:hover { background: var(--primary); color: #fff; }
+.cv-vocab-audio-btn svg { width: 16px; height: 16px; }
+
+.cv-vocab-learn-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border: 1px solid var(--border);
+  border-radius: var(--radius-pill); background: var(--card);
+  font-family: var(--font-display); font-size: .75rem; font-weight: 700;
+  color: var(--muted); transition: all var(--t-fast);
+}
+.cv-vocab-learn-btn:hover { border-color: var(--accent); color: var(--accent-dark); }
+.cv-vocab-learn-btn.is-learned { background: var(--accent); border-color: var(--accent); color: #fff; }
+.cv-vocab-learn-btn svg { width: 13px; height: 13px; }
+
+.cv-vocab-global-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border: 1px solid var(--border);
+  border-radius: var(--radius-pill); background: var(--card);
+  font-family: var(--font-display); font-size: .75rem; font-weight: 700;
+  color: var(--muted); transition: all var(--t-fast);
+}
+.cv-vocab-global-btn:hover { border-color: var(--primary); color: var(--primary); }
+.cv-vocab-global-btn:disabled { opacity: .5; cursor: default; }
+.cv-vocab-global-btn svg { width: 13px; height: 13px; }
+
+/* Diálogos */
+.cv-dialogue { margin-bottom: 20px; }
+.cv-dialogue:last-child { margin-bottom: 0; }
+.cv-dialogue-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+}
+.cv-dialogue-title { font-family: var(--font-display); font-weight: 700; color: var(--ink); }
+.cv-register-badge {
+  font-size: .68rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: var(--radius-pill);
+}
+.register-formal { background: var(--primary-soft); color: var(--primary-dark); }
+.register-informal { background: var(--accent-soft); color: var(--accent-dark); }
+.register-coloquial { background: var(--amber-soft); color: #92400E; }
+.cv-dialogue-lines { display: grid; gap: 10px; }
+
+/* Mini-quiz */
+.cv-mini-quiz { display: grid; gap: 20px; }
+.cv-quiz-item { padding: 18px; background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); }
+.cv-quiz-q { font-family: var(--font-display); font-weight: 700; color: var(--ink); margin-bottom: 12px; font-size: .97rem; }
+.cv-quiz-opts { display: grid; gap: 8px; }
+.cv-quiz-opt {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--card); font-size: .9rem; color: var(--ink-soft);
+  text-align: left; transition: all var(--t-fast);
+}
+.cv-quiz-opt:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
+.cv-quiz-opt.is-correct { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-dark); }
+.cv-quiz-opt.is-wrong { border-color: var(--danger); background: var(--danger-soft); color: #9F1239; }
+.cv-quiz-opt:disabled { cursor: default; }
+.cv-quiz-feedback { margin-top: 10px; font-weight: 700; font-size: .88rem; min-height: 1rem; }
+.cv-quiz-feedback.ok { color: var(--accent-dark); }
+.cv-quiz-feedback.bad { color: var(--danger); }
+.cv-quiz-explain {
+  display: flex; align-items: flex-start; gap: 7px; margin-top: 8px;
+  font-size: .85rem; color: var(--ink-soft); background: var(--amber-soft);
+  padding: 10px 12px; border-radius: var(--radius-sm);
+}
+.cv-quiz-explain svg { width: 15px; height: 15px; color: var(--amber); flex: none; margin-top: 2px; }
+
+/* Plan diario */
+.cv-daily-plan { background: linear-gradient(135deg, var(--primary-soft), var(--accent-soft)); border-color: rgba(79,70,229,.2); }
+.cv-plan-steps { display: grid; gap: 10px; }
+.cv-plan-step {
+  display: flex; align-items: center; gap: 14px; padding: 12px 14px;
+  background: var(--card); border-radius: var(--radius-sm); border: 1px solid var(--border);
+}
+.cv-plan-time {
+  flex: none; padding: 4px 10px; border-radius: var(--radius-pill);
+  background: var(--primary); color: #fff;
+  font-family: var(--font-display); font-size: .78rem; font-weight: 800;
+}
+.cv-plan-activity { font-size: .9rem; color: var(--ink-soft); }
+
+/* Barra de acción inferior */
+.cv-done-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; flex-wrap: wrap;
+  padding: 20px 24px; margin-top: 8px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);
+}
+.cv-done-bar-info {
+  display: flex; align-items: center; gap: 8px;
+  font-size: .9rem; color: var(--muted);
+}
+.cv-done-bar-info svg { width: 18px; height: 18px; color: var(--accent); }
+.cv-done-bar-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* Mini-barra de progreso en las tarjetas del catálogo */
+.course-mini-progress {
+  display: flex; align-items: center; gap: 10px; margin-top: 8px;
+}
+.course-mini-bar {
+  flex: 1; height: 5px; background: var(--surface-2); border-radius: 999px; overflow: hidden;
+}
+.course-mini-bar div {
+  height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transition: width .4s var(--ease);
+}
+.course-mini-progress span { font-size: .72rem; color: var(--muted); white-space: nowrap; }
+
+/* Responsive de la vista de curso */
+@media (max-width: 860px) {
+  .cv-topbar-inner { height: auto; gap: 10px; }
+  .cv-title-wrap { flex: none; width: 100%; }
+  .cv-topbar-actions { width: 100%; justify-content: space-between; }
+  .cv-progress-bar-wrap { flex: 1; }
+}
+@media (max-width: 620px) {
+  .cv-module-header { padding: 20px; }
+  .cv-section { padding: 18px; }
+  .cv-vocab-item { grid-template-columns: 1fr; }
+  .cv-vocab-actions { flex-direction: row; }
+  .cv-done-bar { flex-direction: column; align-items: stretch; }
+  .cv-done-bar-actions { justify-content: stretch; }
+  .cv-done-bar-actions .btn { flex: 1; }
+}
+
+/* ----------------------------------------------------------------------------
    22. Responsive
    -------------------------------------------------------------------------- */
 @media (max-width: 1024px) {
@@ -1218,3 +1633,61 @@ textarea:focus, input:focus, select:focus { outline: none; border-color: var(--p
   .certificate .cert-sub, .certificate .cert-text, .certificate .cert-meta span { color: #334155 !important; }
   @page { margin: 14mm; }
 }
+
+/* ----------------------------------------------------------------------------
+   24. Utilidades y componentes base añadidos para el HTML estático
+   (layout del hero, panel base y soporte del constructor de oraciones)
+   -------------------------------------------------------------------------- */
+.course-view[hidden] { display: none !important; }
+.hero-copy { display: flex; flex-direction: column; }
+.panel-body { display: block; }
+
+/* Utilidades de soporte (layout del constructor de oraciones y paneles) */
+.mb-3 { margin-bottom: 0.75rem !important; }
+.mt-2 { margin-top: 0.5rem !important; }
+.mt-3 { margin-top: 0.75rem !important; }
+.me-2 { margin-right: 0.5rem !important; }
+.mb-1 { margin-bottom: 0.25rem !important; }
+.mx-1 { margin-inline: 0.25rem !important; }
+.py-2 { padding-block: 0.5rem !important; }
+.px-3 { padding-inline: 0.75rem !important; }
+.rounded { border-radius: var(--radius) !important; }
+.rounded-pill { border-radius: 999px !important; }
+.p-3 { padding: 0.75rem !important; }
+.bg-primary { background: var(--primary) !important; }
+.text-white { color: #fff !important; }
+.small { font-size: 0.875em !important; }
+.w-100 { width: 100% !important; }
+.text-center { text-align: center !important; }
+.row { display: flex; flex-wrap: wrap; }
+.g-2 { gap: 0.5rem; }
+.answer-badge {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.25rem;
+  padding: 0.5rem 0.75rem; border-radius: 999px;
+  background: var(--primary); color: #fff; font-weight: 700; font-size: 0.85rem;
+  cursor: grab;
+}
+.btn-outline-secondary {
+  background: transparent; border: 1px solid var(--border); color: var(--ink-soft);
+  border-radius: var(--radius); padding: 0.5rem 0.9rem; font-weight: 600; font-size: 0.9rem;
+}
+.btn-outline-secondary:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+.btn-secondary { background: var(--surface-2); color: var(--ink); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--border); color: var(--ink); }
+.btn-link { background: none; border: none; padding: 0; color: var(--primary); font-weight: 600; }
+.btn-link:hover { color: var(--primary-dark); text-decoration: underline; }
+.word-btn {
+  width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;
+  padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--card); color: var(--ink); font-weight: 600; font-size: 0.9rem;
+}
+.word-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+.word-btn.selected { border-color: var(--primary); background: var(--primary-soft); color: var(--primary-dark); }
+.drop-zone { min-height: 60px; }
+.form-check { display: flex; gap: 0.5rem; align-items: flex-start; margin-bottom: 0.75rem; }
+.form-check-input { width: 1rem; height: 1rem; margin-top: 0.2rem; accent-color: var(--primary); }
+.form-check-label { font-size: 0.9rem; color: var(--ink-soft); }
+
+/* Estado de respuesta del constructor de oraciones */
+#feedback.correct { color: var(--accent-dark); }
+#feedback.wrong { color: var(--danger); }

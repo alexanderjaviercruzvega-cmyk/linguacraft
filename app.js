@@ -62,6 +62,9 @@ const DEFAULT_STATE = {
   todayCount: 0,         // repasos hechos hoy
   review: [],            // ids de tarjetas marcadas para repaso
   completed: [],         // ids de cursos marcados como completados
+  // Progreso interno por curso:
+  // { [courseId]: { currentModule: 0, completedModules: [], learnedVocab: [] } }
+  courseProgress: {},
 };
 
 let state = loadState();
@@ -349,42 +352,98 @@ function renderLanguages() {
   if (!grid) return;
 
   grid.innerHTML = LANGUAGES.map(
-    (l) => `
-    <article class="lang-card">
-      <div class="lang-head">
-        <span class="lang-flag">${l.flag}</span>
-        <div>
-          <h3>${escapeHtml(l.name)}</h3>
-          <span class="lang-tag">${escapeHtml(l.tag)}</span>
+    (l) => {
+      const coursesOfLang = COURSES.filter((c) => c.langId === l.id);
+      const freeCount = coursesOfLang.filter((c) => c.tag === "free").length;
+      const proCount  = coursesOfLang.filter((c) => c.tag === "pro").length;
+
+      // Estrellas de dificultad
+      const stars = l.difficultyStars
+        ? Array.from({ length: 5 }, (_, i) =>
+            `<span class="diff-star ${i < l.difficultyStars ? "on" : ""}">★</span>`
+          ).join("")
+        : "";
+
+      return `
+      <article class="lang-card">
+        <div class="lang-head">
+          <span class="lang-flag">${l.flag}</span>
+          <div>
+            <h3>${escapeHtml(l.name)}</h3>
+            <span class="lang-tag">${escapeHtml(l.tag)}</span>
+          </div>
         </div>
-      </div>
-      <p class="lang-tagline">${escapeHtml(l.tagline)}</p>
+        <p class="lang-tagline">${escapeHtml(l.tagline)}</p>
 
-      <div class="phrase-list">
-        ${l.phrases
-          .map(
-            (p, i) => `
-          <div class="phrase-row">
-            <div class="phrase-main">
-              <div class="phrase-term">${escapeHtml(p.term)}</div>
-              <div class="phrase-romaji">${escapeHtml(p.romaji)}</div>
-            </div>
-            <div class="phrase-mean">${escapeHtml(p.meaning)}</div>
-            <button class="phrase-audio" type="button" data-lang="${l.id}" data-phrase="${i}"
-                    aria-label="Escuchar ${escapeHtml(p.term)}" aria-pressed="false">
-              <i data-lucide="volume-2"></i>
-            </button>
-          </div>`
-          )
-          .join("")}
-      </div>
+        <!-- Stats rápidas -->
+        <div class="lang-stats">
+          <div class="lang-stat">
+            <i data-lucide="users"></i>
+            <span>${escapeHtml(l.speakers || "—")}</span>
+          </div>
+          <div class="lang-stat">
+            <i data-lucide="globe-2"></i>
+            <span>${escapeHtml(l.countries || "—")}</span>
+          </div>
+          <div class="lang-stat">
+            <i data-lucide="type"></i>
+            <span>${escapeHtml(l.script || "—")}</span>
+          </div>
+        </div>
 
-      <p class="lang-cultural">${escapeHtml(l.cultural)}</p>
-      <p class="lang-note">
-        <i data-lucide="volume-2"></i>
-        ${l.mymemory ? "Audio y traducción en vivo disponibles" : "Audio con voz de respaldo (sin traducción en vivo)"}
-      </p>
-    </article>`
+        <!-- Dificultad -->
+        ${stars ? `<div class="lang-difficulty">
+          <span class="diff-label">Dificultad:</span>
+          <span class="diff-stars">${stars}</span>
+          <span class="diff-text">${escapeHtml(l.difficulty)}</span>
+        </div>` : ""}
+
+        <!-- Frases con audio -->
+        <div class="phrase-list">
+          ${l.phrases
+            .map(
+              (p, i) => `
+            <div class="phrase-row">
+              <div class="phrase-main">
+                <div class="phrase-term">${escapeHtml(p.term)}</div>
+                <div class="phrase-romaji">${escapeHtml(p.romaji)}</div>
+              </div>
+              <div class="phrase-mean">${escapeHtml(p.meaning)}</div>
+              <button class="phrase-audio" type="button" data-lang="${l.id}" data-phrase="${i}"
+                      aria-label="Escuchar ${escapeHtml(p.term)}" aria-pressed="false">
+                <i data-lucide="volume-2"></i>
+              </button>
+            </div>`
+            )
+            .join("")}
+        </div>
+
+        <!-- Dato curioso -->
+        ${l.curiosity ? `<div class="lang-curiosity">
+          <i data-lucide="lightbulb"></i>
+          <p>${escapeHtml(l.curiosity)}</p>
+        </div>` : ""}
+
+        <p class="lang-cultural">${escapeHtml(l.cultural)}</p>
+
+        <!-- Footer: audio info + botón Ver Cursos -->
+        <div class="lang-footer">
+          <p class="lang-note">
+            <i data-lucide="volume-2"></i>
+            ${l.mymemory ? "Audio y traducción en vivo disponibles" : "Solo audio (sin traducción en vivo)"}
+          </p>
+          ${coursesOfLang.length > 0
+            ? `<button class="btn btn-primary btn-sm lang-courses-btn" type="button"
+                       data-lang-courses="${l.id}" aria-label="Ver cursos de ${escapeHtml(l.name)}">
+                 <i data-lucide="graduation-cap"></i>
+                 Ver cursos
+                 <span class="course-count-pill">${freeCount > 0 ? freeCount + " gratis" : ""}${freeCount > 0 && proCount > 0 ? " · " : ""}${proCount > 0 ? proCount + " PRO" : ""}</span>
+               </button>`
+            : `<span class="lang-no-courses"><i data-lucide="clock"></i> Cursos próximamente</span>`
+          }
+        </div>
+      </article>`;
+    }
   ).join("");
 
   refreshIcons();
@@ -394,13 +453,113 @@ function initLanguageGrid() {
   const grid = $("#langGrid");
   if (!grid) return;
   grid.addEventListener("click", (e) => {
-    const btn = e.target.closest(".phrase-audio");
-    if (!btn) return;
-    const lang = LANG_BY_ID[btn.dataset.lang];
-    if (!lang) return;
-    const phrase = lang.phrases[Number(btn.dataset.phrase)];
-    if (phrase) speak(phrase.term, lang.speech, btn, lang.fallback);
+    // Audio de frases
+    const audioBtn = e.target.closest(".phrase-audio");
+    if (audioBtn) {
+      const lang = LANG_BY_ID[audioBtn.dataset.lang];
+      if (!lang) return;
+      const phrase = lang.phrases[Number(audioBtn.dataset.phrase)];
+      if (phrase) speak(phrase.term, lang.speech, audioBtn, lang.fallback);
+      return;
+    }
+    // Botón "Ver cursos"
+    const coursesBtn = e.target.closest("[data-lang-courses]");
+    if (coursesBtn) {
+      openLangCoursesModal(coursesBtn.dataset.langCourses);
+    }
   });
+}
+
+function openLangCoursesModal(langId) {
+  const lang = LANG_BY_ID[langId];
+  if (!lang) return;
+
+  const courses = COURSES.filter((c) => c.langId === langId);
+  if (!courses.length) return;
+
+  const body = $("#courseModalBody");
+
+  const coursesHtml = courses
+    .map((c) => {
+      const locked = isCourseLocked(c);
+      const done   = isCourseCompleted(c);
+      const isPro  = c.tag === "pro";
+      return `
+        <div class="lang-course-item ${locked ? "is-locked" : ""}">
+          <div class="lci-cover" style="background:${c.cover}">
+            <span class="lci-flag">${c.flag}</span>
+            <span class="course-tag ${isPro ? "tag-pro" : "tag-free"}">
+              <i data-lucide="${isPro ? "crown" : "unlock"}"></i> ${isPro ? "PRO" : "Gratis"}
+            </span>
+          </div>
+          <div class="lci-body">
+            <span class="course-lang">${escapeHtml(c.level)}</span>
+            <h4>${escapeHtml(c.title)}</h4>
+            <p>${escapeHtml(c.desc)}</p>
+            <div class="course-meta" style="margin-top:8px">
+              <span><i data-lucide="clock"></i> ${escapeHtml(c.duration)}</span>
+              <span><i data-lucide="layers"></i> 3 módulos</span>
+            </div>
+            ${done ? `<div class="lock-strip is-done" style="margin-top:10px"><i data-lucide="check-circle-2"></i> Completado</div>` : ""}
+            ${locked ? `<div class="lock-strip" style="margin-top:10px"><i data-lucide="lock"></i> Requiere plan PRO</div>` : ""}
+          </div>
+          <div class="lci-foot">
+            <button class="btn ${locked ? "btn-soft" : "btn-primary"} btn-block" type="button"
+                    data-open-course="${c.id}">
+              <i data-lucide="${locked ? "lock" : "play-circle"}"></i>
+              ${locked ? "Ver temario" : "Iniciar lección"}
+            </button>
+          </div>
+        </div>`;
+    })
+    .join("");
+
+  body.innerHTML = `
+    <div class="lang-modal-head" style="background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border-radius:var(--radius-lg);padding:24px;margin-bottom:24px;display:flex;align-items:center;gap:18px">
+      <span style="font-size:3.2rem;line-height:1">${lang.flag}</span>
+      <div>
+        <h2 id="courseModalTitle" style="margin:0 0 4px">${escapeHtml(lang.name)}</h2>
+        <p style="color:var(--muted);font-size:.9rem;margin:0">${escapeHtml(lang.tagline)}</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:.8rem;color:var(--ink-soft)">
+          <span><i data-lucide="users" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"></i>${escapeHtml(lang.speakers || "—")}</span>
+          <span><i data-lucide="globe-2" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"></i>${escapeHtml(lang.countries || "—")}</span>
+          <span><i data-lucide="signal" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"></i>${escapeHtml(lang.difficulty || "—")}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mc-section">
+      <h3><i data-lucide="graduation-cap"></i> Cursos disponibles (${courses.length})</h3>
+      <div class="lang-courses-list">${coursesHtml}</div>
+    </div>
+
+    ${lang.curiosity ? `
+    <div class="mc-section">
+      <div class="cultural-note">
+        <h3><i data-lucide="lightbulb"></i> ¿Sabías que…?</h3>
+        <p>${escapeHtml(lang.curiosity)}</p>
+      </div>
+    </div>` : ""}
+
+    <div class="mc-section">
+      <div class="cultural-note">
+        <h3><i data-lucide="landmark"></i> Contexto cultural</h3>
+        <p>${escapeHtml(lang.cultural)}</p>
+      </div>
+    </div>
+  `;
+
+  refreshIcons();
+
+  // Reutilizamos el listener del modal de curso para los botones "Iniciar lección"
+  $$("[data-open-course]", body).forEach((btn) => {
+    btn.addEventListener("click", () => {
+      closeAllModals();
+      setTimeout(() => openCourseModal(btn.dataset.openCourse), 180);
+    });
+  });
+
+  openModal($("#courseModal"));
 }
 
 /* ============================================================================
@@ -416,156 +575,25 @@ function isCourseCompleted(course) {
   return state.completed.includes(course.id);
 }
 
-// Detecta si venimos de un enlace "curso completo" ?course=ID
-const urlParams = new URLSearchParams(window.location.search);
-const courseFromParam = urlParams.get("course");
+/** Devuelve (o crea) el objeto de progreso de un curso en state. */
+function getCourseProgress(courseId) {
+  if (!state.courseProgress[courseId]) {
+    state.courseProgress[courseId] = {
+      currentModule: 0,
+      completedModules: [],
+      learnedVocab: [],       // ids de vocab aprendido dentro del curso
+    };
+  }
+  return state.courseProgress[courseId];
+}
 
 function renderCourses() {
   const grid = $("#courseGrid");
   if (!grid) return;
 
-  // Si venimos del modo "curso completo" en nueva ventana, oc hero y mostramos solo ese curso
-  if (courseFromParam) {
-    const course = COURSES.find((c) => c.id === courseFromParam);
-    if (course) {
-      grid.innerHTML = `
-        <div class="course-detail-page">
-          <button class="btn btn-ghost btn-back" style="position:absolute;top:20px;left:20px" id="backToHome">
-            <i data-lucide="arrow-left"></i> Volver al inicio
-          </button>
-          <div class="course-cover" style="background:${course.cover};height:200px;margin:-20px -20px 20px;border-radius:12px 12px 0 0;">
-            <span class="course-tag ${course.tag === "pro" ? "tag-pro" : "tag-free"}">
-              <i data-lucide="${course.tag === "pro" ? "crown" : "unlock"}"></i> ${course.tag === "pro" ? "PRO" : "Gratis"}
-            </span>
-            <span class="cover-flag">${course.flag}</span>
-          </div>
-          <div class="container">
-            <div class="course-detail-header">
-              <span class="course-lang">${escapeHtml(course.langName)} · ${escapeHtml(course.level)}</span>
-              <h2 class="course-title">${escapeHtml(course.title)}</h2>
-              <p class="course-desc">${escapeHtml(course.desc)}</p>
-              <div class="course-meta">
-                <span><i data-lucide="clock"></i> ${escapeHtml(course.duration)}</span>
-                <span><i data-lucide="layers"></i> 3 módulos</span>
-                <span><i data-lucide="bar-chart-3"></i> ${escapeHtml(course.level)}</span>
-              </div>
-            </div>
-
-            <div class="mc-section">
-              <h3><i data-lucide="list-checks"></i> Temario</h3>
-              <ul>${course.syllabus.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ul>
-            </div>
-
-            <div class="mc-section">
-              <h3><i data-lucide="book-open"></i> Módulos completos</h3>
-              ${course.modules
-                .map(
-                  (m, i) => `
-              <div class="module-item">
-                <span class="module-num"><i data-lucide="layers"></i> Módulo ${i + 1}</span>
-                <h4>${escapeHtml(m.title)}</h4>
-                <p>${escapeHtml(m.summary)}</p>
-                <ul>${m.points.map((p) => `<li>${escapeHtml(p)}</li>`).join("")}</ul>
-              </div>`
-                )
-                .join("")}
-            </div>
-
-            <div class="mc-section">
-              <h3><i data-lucide="headphones"></i> Vocabulario con audio</h3>
-              ${course.vocab
-                .map(
-                  (v, i) => `
-              <div class="vocab-item">
-                <div class="vocab-main">
-                  <div class="vocab-term">${escapeHtml(v.term)}</div>
-                  <div class="vocab-romaji">${escapeHtml(v.romaji)}</div>
-                </div>
-                <div class="vocab-mean">${escapeHtml(v.meaning)}</div>
-                <button class="vocab-audio" type="button" data-audio="${i}" aria-label="Escuchar ${escapeHtml(v.term)}">
-                  <i data-lucide="volume-2"></i>
-                </button>
-              </div>`
-                )
-                .join("")}
-            </div>
-
-            <div class="mc-section">
-              <h3><i data-lucide="messages-square"></i> Diálogo de ejemplo</h3>
-              ${course.dialogue
-                .map(
-                  (d, i) => `
-              <div class="dialogue-row">
-                <span class="dialogue-who">${escapeHtml(d.who)}</span>
-                <div class="dialogue-line">
-                  <div class="dialogue-orig">
-                    ${escapeHtml(d.line)}
-                    <button class="dialogue-audio" type="button" data-dialogue="${i}" aria-label="Escuchar">
-                      <i data-lucide="volume-2"></i>
-                    </button>
-                  </div>
-                  <div class="dialogue-tr">${escapeHtml(d.tr)}</div>
-                </div>
-              </div>`
-                )
-                .join("")}
-            </div>
-
-            <div class="mc-section">
-              <div class="cultural-note">
-                <h3><i data-lucide="landmark"></i> Nota cultural</h3>
-                <p>${escapeHtml(course.cultural)}</p>
-              </div>
-            </div>
-
-            <div class="course-complete-bar">
-              <p><i data-lucide="check-circle-2"></i> ${isCourseCompleted(course) ? "Marcaste este curso como completado." : "¿Terminaste el curso? Márcalo para tu certificado."}</p>
-              <button class="btn ${isCourseCompleted(course) ? "btn-ghost" : "btn-accent"}" type="button" id="completeCourseBtn" data-course="${course.id}">
-                <i data-lucide="${isCourseCompleted(course) ? "rotate-ccw" : "award"}"></i> ${isCourseCompleted(course) ? "Quitar de completados" : "Marcar como completado"}
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
-      refreshIcons();
-
-      // Audio del vocabulario
-      $$("[data-audio]", grid).forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const v = course.vocab[Number(btn.dataset.audio)];
-          if (v) speak(v.term, v.lang, btn, v.fallback || LANG_BY_ID[course.langId]?.fallback);
-        });
-      });
-
-      // Audio del diálogo
-      $$("[data-dialogue]", grid).forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const d = course.dialogue[Number(btn.dataset.dialogue)];
-          const lang = LANG_BY_ID[course.langId];
-          if (d) speak(d.line, lang?.speech || "es-MX", btn, lang?.fallback);
-        });
-      });
-
-      // Marcar curso como completado
-      $("#completeCourseBtn")?.addEventListener("click", () => toggleCourseCompleted(course.id));
-
-      // Botón volver al inicio
-      $("#backToHome")?.addEventListener("click", () => {
-        window.location.hash = "";
-        // Forzamos recarga quitando el param
-        const newUrl = window.location.pathname + window.location.search.replace(/\?course=[^&]*/, "").replace(/&$/,"").replace(/\?$/, "");
-        window.history.replaceState({}, document.title, newUrl);
-        renderCourses(); // volvemos a renderizar la pantalla inicial
-      });
-
-      return;
-    }
-  }
-
-  // Vistas normales del catálogo (grid original)
   const list = COURSES.filter(
     (c) =>
-      (courseFilters.tag === "all" || c.tag === courseFilters.tag) &&
+      (courseFilters.tag   === "all" || c.tag   === courseFilters.tag) &&
       (courseFilters.level === "all" || c.level === courseFilters.level)
   );
 
@@ -577,14 +605,21 @@ function renderCourses() {
 
   grid.innerHTML = list
     .map((c, i) => {
-      const isPro = c.tag === "pro";
-      const locked = isCourseLocked(c);
-      const done = isCourseCompleted(c);
+      const isPro   = c.tag === "pro";
+      const locked  = isCourseLocked(c);
+      const done    = isCourseCompleted(c);
+      const prog    = getCourseProgress(c.id);
+      const modCount = Array.isArray(c.modules) ? c.modules.length : 0;
+      const doneModules = prog.completedModules.length;
+      const pct = modCount > 0 ? Math.round((doneModules / modCount) * 100) : 0;
+
       return `
-        <article class="course-card ${locked ? "is-locked" : ""}" style="animation-delay:${i * 50}ms" data-id="${c.id}">
+        <article class="course-card ${locked ? "is-locked" : ""}"
+                 style="animation-delay:${i * 50}ms" data-id="${c.id}">
           <div class="course-cover" style="background:${c.cover}">
             <span class="course-tag ${isPro ? "tag-pro" : "tag-free"}">
-              <i data-lucide="${isPro ? "crown" : "unlock"}"></i> ${isPro ? "PRO" : "Gratis"}
+              <i data-lucide="${isPro ? "crown" : "unlock"}"></i>
+              ${isPro ? "PRO" : "Gratis"}
             </span>
             <span class="cover-flag">${c.flag}</span>
           </div>
@@ -594,235 +629,38 @@ function renderCourses() {
             <p class="course-desc">${escapeHtml(c.desc)}</p>
             <div class="course-meta">
               <span><i data-lucide="clock"></i> ${escapeHtml(c.duration)}</span>
-              <span><i data-lucide="layers"></i> 3 módulos</span>
+              <span><i data-lucide="layers"></i> ${modCount || 4} módulos</span>
               <span><i data-lucide="bar-chart-3"></i> ${escapeHtml(c.level)}</span>
             </div>
+            ${!locked && modCount > 0 ? `
+            <div class="course-mini-progress" title="${doneModules} de ${modCount} módulos completados">
+              <div class="course-mini-bar">
+                <div style="width:${pct}%"></div>
+              </div>
+              <span>${doneModules}/${modCount} módulos</span>
+            </div>` : ""}
           </div>
           <div class="course-foot">
             ${locked
               ? `<div class="lock-strip"><i data-lucide="lock"></i> Requiere suscripción PRO</div>`
               : done
                 ? `<div class="lock-strip is-done"><i data-lucide="check-circle-2"></i> Curso completado</div>`
-                : `<div class="lock-strip is-open"><i data-lucide="check-circle-2"></i> Desbloqueado</div>`}
-            <button class="btn ${locked ? "btn-soft" : "btn-primary"} btn-block" type="button" data-open-course="${c.id}">
+                : doneModules > 0
+                  ? `<div class="lock-strip is-open"><i data-lucide="play-circle"></i> En progreso</div>`
+                  : `<div class="lock-strip is-open"><i data-lucide="check-circle-2"></i> Desbloqueado</div>`
+            }
+            <button class="btn ${locked ? "btn-soft" : "btn-primary"} btn-block"
+                    type="button" data-open-course="${c.id}">
               <i data-lucide="${locked ? "lock" : "play-circle"}"></i>
-              ${locked ? "Ver temario" : "Ver lección"}
-            </button>
-            <!-- Nuevo botón: Ver curso completo en nueva ventana -->
-            <button class="btn ${locked ? "btn-soft" : "btn-secondary"} btn-block course-full-btn" type="button" data-course-full="${c.id}" style="margin-top:8px;background:#3b82f6;border-color:#3b82f6;">
-              <i data-lucide="external-link"></i> Curso completo
+              ${locked ? "Ver temario" : doneModules > 0 ? "Continuar lección" : "Iniciar lección"}
             </button>
           </div>
-        </article>
-      `;
+        </article>`;
     })
     .join("");
 
   refreshIcons();
-
-  // --- Inicializar los nuevos botones "Curso completo" ---
-  initCourseFullButtons();
 }
-
-function initCourseFullButtons() {
-  $$("[data-course-full]").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const courseId = btn.dataset.courseFull;
-      // Abre un modal con el curso completo en la misma página
-      openCourseCompleteModal(courseId);
-    });
-  });
-}
-
-/* ============================================================================
-   Modal de curso completo - se muestra sobre la página actual
-   ========================================================================== */
-
-function openCourseCompleteModal(courseId) {
-  const course = COURSES.find((c) => c.id === courseId);
-  if (!course) return;
-
-  const isLocked = isCourseLocked(course);
-  const isDone = isCourseCompleted(course);
-
-  // Construir el HTML del modal
-  const modulesHtml = course.modules
-    .map(
-      (m, i) => `
-      <div class="module-item">
-        <span class="module-num"><i data-lucide="layers"></i> Módulo ${i + 1}</span>
-        <h4>${escapeHtml(m.title)}</h4>
-        <p>${escapeHtml(m.summary)}</p>
-        <ul>${m.points.map((p) => `<li>${escapeHtml(p)}</li>`).join("")}</ul>
-      </div>`
-    )
-    .join("");
-
-  const vocabHtml = course.vocab
-    .map(
-      (v, i) => `
-      <div class="vocab-item">
-        <div class="vocab-main">
-          <div class="vocab-term">${escapeHtml(v.term)}</div>
-          <div class="vocab-romaji">${escapeHtml(v.romaji)}</div>
-        </div>
-        <div class="vocab-mean">${escapeHtml(v.meaning)}</div>
-        <button class="vocab-audio" type="button" data-audio="${i}" aria-label="Escuchar ${escapeHtml(v.term)}">
-          <i data-lucide="volume-2"></i>
-        </button>
-      </div>`
-    )
-    .join("");
-
-  const dialogueHtml = course.dialogue
-    .map(
-      (d, i) => `
-      <div class="dialogue-row">
-        <span class="dialogue-who">${escapeHtml(d.who)}</span>
-        <div class="dialogue-line">
-          <div class="dialogue-orig">
-            ${escapeHtml(d.line)}
-            <button class="dialogue-audio" type="button" data-dialogue="${i}" aria-label="Escuchar">
-              <i data-lucide="volume-2"></i>
-            </button>
-          </div>
-          <div class="dialogue-tr">${escapeHtml(d.tr)}</div>
-        </div>
-      </div>`
-    )
-    .join("");
-
-  const body = $("#courseModalBody");
-  const locked = isCourseLocked(course);
-
-  if (locked) {
-    body.innerHTML = `
-      <div class="mc-hero" style="background:${course.cover}">
-        <span class="mc-hero-flag">${course.flag}</span>
-        <div>
-          <span class="mc-hero-lang">${escapeHtml(course.langName)} · ${escapeHtml(course.level)}</span>
-          <h2 id="courseModalTitle">${escapeHtml(course.title)}</h2>
-        </div>
-      </div>
-      <div class="mc-locked">
-        <div class="mc-locked-icon"><i data-lucide="lock"></i></div>
-        <h3>Este curso es exclusivo del plan PRO</h3>
-        <p>«${escapeHtml(course.title)}» incluye 3 módulos completos, vocabulario con audio, un diálogo y notas culturales.</p>
-        <div class="syllabus-preview">
-          <h4><i data-lucide="list-checks"></i> Vista previa del temario</h4>
-          <ul>${course.syllabus.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ul>
-        </div>
-        <button class="btn btn-primary btn-lg" type="button" id="goToPlansBtn">
-          <i data-lucide="crown"></i> Ver planes y desbloquear
-        </button>
-      </div>
-    `;
-    refreshIcons();
-    openModal($("#courseModal"));
-    $("#goToPlansBtn")?.addEventListener("click", () => {
-      closeAllModals();
-      document.getElementById("planes").scrollIntoView({ behavior: "smooth" });
-    });
-    return;
-  }
-
-  // Curso desbloqueado: mostrar material completo en modal
-  const done = isCourseCompleted(course);
-
-  body.innerHTML = `
-    <div class="mc-hero" style="background:${course.cover}">
-      <span class="mc-hero-flag">${course.flag}</span>
-      <div>
-        <span class="mc-hero-lang">${escapeHtml(course.langName)} · ${escapeHtml(course.level)}</span>
-        <h2 id="courseModalTitle">${escapeHtml(course.title)}</h2>
-        <div class="mc-hero-badges">
-          <span class="badge"><i data-lucide="clock"></i> ${escapeHtml(course.duration)}</span>
-          <span class="badge"><i data-lucide="layers"></i> 3 módulos</span>
-          <span class="badge"><i data-lucide="signal"></i> ${escapeHtml(course.level)}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="mc-section">
-      <h3><i data-lucide="list-checks"></i> Temario</h3>
-      <ul>${course.syllabus.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ul>
-    </div>
-
-    <div class="mc-section">
-      <h3><i data-lucide="book-open"></i> Módulos completos</h3>
-      ${modulesHtml}
-    </div>
-
-    <div class="mc-section">
-      <h3><i data-lucide="headphones"></i> Vocabulario con audio</h3>
-      ${vocabHtml}
-    </div>
-
-    <div class="mc-section">
-      <h3><i data-lucide="messages-square"></i> Diálogo de ejemplo</h3>
-      ${dialogueHtml}
-    </div>
-
-    <div class="mc-section">
-      <div class="cultural-note">
-        <h3><i data-lucide="landmark"></i> Nota cultural</h3>
-        <p>${escapeHtml(course.cultural)}</p>
-      </div>
-    </div>
-
-    <div class="course-complete-bar">
-      <p><i data-lucide="check-circle-2"></i> ${done ? "Marcaste este curso como completado." : "¿Terminaste el curso? Márcalo para tu certificado."}</p>
-      <button class="btn ${done ? "btn-ghost" : "btn-accent"}" type="button" id="completeCourseBtn" data-course="${course.id}">
-        <i data-lucide="${done ? "rotate-ccw" : "award"}"></i> ${done ? "Quitar de completados" : "Marcar como completado"}
-      </button>
-    </div>
-  `;
-
-  refreshIcons();
-
-  // Audio del vocabulario
-  $$("[data-audio]", body).forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const v = course.vocab[Number(btn.dataset.audio)];
-      if (v) speak(v.term, v.lang, btn, v.fallback || LANG_BY_ID[course.langId]?.fallback);
-    });
-  });
-
-  // Audio del diálogo
-  $$("[data-dialogue]", body).forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const d = course.dialogue[Number(btn.dataset.dialogue)];
-      const lang = LANG_BY_ID[course.langId];
-      if (d) speak(d.line, lang?.speech || "es-MX", btn, lang?.fallback);
-    });
-  });
-
-  // Marcar curso como completado
-  $("#completeCourseBtn")?.addEventListener("click", () => toggleCourseCompleted(course.id));
-
-  openModal($("#courseModal"));
-}
-
-/* ============================================================================
-   Inicialización: si hay parámetro ?course=ID, mostrar curso completo al cargar
-   ========================================================================== */
-
-function initCourseFromURLParam() {
-  // Si ya fue procesado por el render anterior (modo detalle), no hacer nada
-  // Pero si recarga la página con ?course=ID, asegurar que se muestre el detalle
-  if (courseFromParam) {
-    // Ya fue manejado en renderCourses arriba, solo forzamos un re-render limpio
-    // quitando el hash si hubiera
-    window.history.replaceState({}, document.title, 
-      window.location.pathname + window.location.search.replace(/[?&]course=[^&]*/, "").replace(/&$/, "").replace(/\?$/, "")
-    );
-    // Volvemos a renderizar para quitar el modo detalle si se recarga
-    renderCourses();
-  }
-}
-
-// Ejecutar al cargar
-document.addEventListener("DOMContentLoaded", initCourseFromURLParam);
 
 function initCourseFilters() {
   const tagBox = $("#courseFilters");
@@ -851,100 +689,28 @@ function initCourseGrid() {
   grid.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-open-course]");
     if (!btn) return;
-    openCourseModal(btn.dataset.openCourse);
+    const course = COURSES.find((c) => c.id === btn.dataset.openCourse);
+    if (!course) return;
+    if (isCourseLocked(course)) {
+      openCourseModal(btn.dataset.openCourse); // modal de preview/bloqueo
+    } else {
+      openCourseView(btn.dataset.openCourse);  // vista de página completa
+    }
   });
 }
+
+/* ============================================================================
+   MODAL DE PREVIEW (solo cursos bloqueados)
+   ========================================================================== */
 
 function openCourseModal(courseId) {
   const course = COURSES.find((c) => c.id === courseId);
   if (!course) return;
 
-  const body = $("#courseModalBody");
+  const body  = $("#courseModalBody");
   const locked = isCourseLocked(course);
 
-  // ---- Contenido bloqueado: solo vista previa del temario ----
-  if (locked) {
-    body.innerHTML = `
-      <div class="mc-hero" style="background:${course.cover}">
-        <span class="mc-hero-flag">${course.flag}</span>
-        <div>
-          <span class="mc-hero-lang">${escapeHtml(course.langName)} · ${escapeHtml(course.level)}</span>
-          <h2 id="courseModalTitle">${escapeHtml(course.title)}</h2>
-        </div>
-      </div>
-      <div class="mc-locked">
-        <div class="mc-locked-icon"><i data-lucide="lock"></i></div>
-        <h3>Este curso es exclusivo del plan PRO</h3>
-        <p>«${escapeHtml(course.title)}» incluye 3 módulos completos, vocabulario con audio, un diálogo y notas culturales.</p>
-
-        <div class="syllabus-preview">
-          <h4><i data-lucide="list-checks"></i> Vista previa del temario</h4>
-          <ul>${course.syllabus.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ul>
-        </div>
-
-        <button class="btn btn-primary btn-lg" type="button" id="goToPlansBtn">
-          <i data-lucide="crown"></i> Ver planes y desbloquear
-        </button>
-      </div>
-    `;
-    refreshIcons();
-
-    $("#goToPlansBtn")?.addEventListener("click", () => {
-      closeAllModals();
-      document.getElementById("planes").scrollIntoView({ behavior: "smooth" });
-    });
-    openModal($("#courseModal"));
-    return;
-  }
-
-  // ---- Curso desbloqueado: material completo ----
-  const done = isCourseCompleted(course);
-
-  const modulesHtml = course.modules
-    .map(
-      (m, i) => `
-      <div class="module-item">
-        <span class="module-num"><i data-lucide="layers"></i> Módulo ${i + 1}</span>
-        <h4>${escapeHtml(m.title)}</h4>
-        <p>${escapeHtml(m.summary)}</p>
-        <ul>${m.points.map((p) => `<li>${escapeHtml(p)}</li>`).join("")}</ul>
-      </div>`
-    )
-    .join("");
-
-  const vocabHtml = course.vocab
-    .map(
-      (v, i) => `
-      <div class="vocab-item">
-        <div class="vocab-main">
-          <div class="vocab-term">${escapeHtml(v.term)}</div>
-          <div class="vocab-romaji">${escapeHtml(v.romaji)}</div>
-        </div>
-        <div class="vocab-mean">${escapeHtml(v.meaning)}</div>
-        <button class="vocab-audio" type="button" data-audio="${i}" aria-label="Escuchar ${escapeHtml(v.term)}">
-          <i data-lucide="volume-2"></i>
-        </button>
-      </div>`
-    )
-    .join("");
-
-  const dialogueHtml = course.dialogue
-    .map(
-      (d, i) => `
-      <div class="dialogue-row">
-        <span class="dialogue-who">${escapeHtml(d.who)}</span>
-        <div class="dialogue-line">
-          <div class="dialogue-orig">
-            ${escapeHtml(d.line)}
-            <button class="dialogue-audio" type="button" data-dialogue="${i}" aria-label="Escuchar">
-              <i data-lucide="volume-2"></i>
-            </button>
-          </div>
-          <div class="dialogue-tr">${escapeHtml(d.tr)}</div>
-        </div>
-      </div>`
-    )
-    .join("");
+  if (!locked) { openCourseView(courseId); return; } // por si acaso
 
   body.innerHTML = `
     <div class="mc-hero" style="background:${course.cover}">
@@ -954,80 +720,537 @@ function openCourseModal(courseId) {
         <h2 id="courseModalTitle">${escapeHtml(course.title)}</h2>
         <div class="mc-hero-badges">
           <span class="badge"><i data-lucide="clock"></i> ${escapeHtml(course.duration)}</span>
-          <span class="badge"><i data-lucide="layers"></i> 3 módulos</span>
+          <span class="badge"><i data-lucide="layers"></i> 4 módulos</span>
           <span class="badge"><i data-lucide="signal"></i> ${escapeHtml(course.level)}</span>
         </div>
       </div>
     </div>
-
-    <div class="mc-section">
-      <h3><i data-lucide="file-text"></i> Descripción del curso</h3>
-      <p>${escapeHtml(course.desc)}</p>
-    </div>
-
-    <div class="mc-section">
-      <h3><i data-lucide="list-checks"></i> Temario</h3>
-      <ul>${course.syllabus.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ul>
-    </div>
-
-    <div class="mc-section">
-      <h3><i data-lucide="book-open"></i> Contenido de los módulos</h3>
-      <div class="module-list">${modulesHtml}</div>
-    </div>
-
-    <div class="mc-section">
-      <h3><i data-lucide="headphones"></i> Vocabulario con audio</h3>
-      <div class="vocab-list">${vocabHtml}</div>
-    </div>
-
-    <div class="mc-section">
-      <h3><i data-lucide="messages-square"></i> Diálogo de ejemplo</h3>
-      <div class="dialogue-list">${dialogueHtml}</div>
-    </div>
-
-    <div class="mc-section">
-      <div class="cultural-note">
-        <h3><i data-lucide="landmark"></i> Nota cultural</h3>
-        <p>${escapeHtml(course.cultural)}</p>
+    <div class="mc-locked">
+      <div class="mc-locked-icon"><i data-lucide="lock"></i></div>
+      <h3>Este curso es exclusivo del plan PRO</h3>
+      <p>«${escapeHtml(course.title)}» incluye 4 módulos completos con fonética, gramática, vocabulario con audio, 2 diálogos y actividades de comprensión.</p>
+      <div class="syllabus-preview">
+        <h4><i data-lucide="list-checks"></i> Contenido del curso</h4>
+        <ul>
+          <li>Módulo 1 · Fonética y pronunciación</li>
+          <li>Módulo 2 · Estructura gramatical clave</li>
+          <li>Módulo 3 · Vocabulario contextual y expresiones</li>
+          <li>Módulo 4 · Uso real, diálogos y cultura</li>
+        </ul>
       </div>
-    </div>
-
-    <div class="course-complete-bar">
-      <p><i data-lucide="check-circle-2"></i> ${done ? "Marcaste este curso como completado." : "¿Terminaste el curso? Márcalo para tu certificado."}</p>
-      <button class="btn ${done ? "btn-ghost" : "btn-accent"}" type="button" id="completeCourseBtn" data-course="${course.id}">
-        <i data-lucide="${done ? "rotate-ccw" : "award"}"></i> ${done ? "Quitar de completados" : "Marcar como completado"}
+      <button class="btn btn-primary btn-lg" type="button" id="goToPlansBtn">
+        <i data-lucide="crown"></i> Ver planes y desbloquear
       </button>
     </div>
   `;
   refreshIcons();
-
-  // Audio del vocabulario
-  $$("[data-audio]", body).forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const v = course.vocab[Number(btn.dataset.audio)];
-      if (v) speak(v.term, v.lang, btn, v.fallback || LANG_BY_ID[course.langId]?.fallback);
-    });
+  $("#goToPlansBtn")?.addEventListener("click", () => {
+    closeAllModals();
+    document.getElementById("planes").scrollIntoView({ behavior: "smooth" });
   });
-
-  // Audio del diálogo
-  $$("[data-dialogue]", body).forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const d = course.dialogue[Number(btn.dataset.dialogue)];
-      const lang = LANG_BY_ID[course.langId];
-      if (d) speak(d.line, lang?.speech || "es-MX", btn, lang?.fallback);
-    });
-  });
-
-  // Marcar curso como completado
-  $("#completeCourseBtn")?.addEventListener("click", () => toggleCourseCompleted(course.id));
-
   openModal($("#courseModal"));
 }
 
-function toggleCourseCompleted(courseId) {
+/* ============================================================================
+   VISTA DE CURSO COMPLETO (pantalla entera con tabs de módulos)
+   ========================================================================== */
+
+/** Abre la vista de página completa para un curso desbloqueado. */
+function openCourseView(courseId) {
   const course = COURSES.find((c) => c.id === courseId);
   if (!course) return;
 
+  const prog = getCourseProgress(courseId);
+  const view = $("#courseView");
+  if (!view) return;
+
+  // Ocultar main, mostrar view
+  $("main").hidden = true;
+  view.hidden = false;
+  window.scrollTo({ top: 0, behavior: "instant" });
+
+  // Topbar: título del curso
+  const titleWrap = $("#cvTitleWrap");
+  if (titleWrap) {
+    titleWrap.innerHTML = `
+      <span style="font-size:1.6rem;line-height:1">${course.flag}</span>
+      <div>
+        <div class="cv-course-name">${escapeHtml(course.title)}</div>
+        <div class="cv-course-lang">${escapeHtml(course.langName)} · ${escapeHtml(course.level)}</div>
+      </div>`;
+  }
+
+  // Botón volver
+  const backBtn = $("#cvBackBtn");
+  if (backBtn) {
+    // Reemplazar para limpiar listeners anteriores
+    const clone = backBtn.cloneNode(true);
+    backBtn.replaceWith(clone);
+    clone.addEventListener("click", closeCourseView);
+  }
+
+  // Renderizar tabs y primer módulo
+  renderCourseViewTabs(course, prog);
+  renderCourseViewModule(course, prog, prog.currentModule);
+}
+
+/** Cierra la vista de curso y vuelve al catálogo. */
+function closeCourseView() {
+  const view = $("#courseView");
+  if (view) view.hidden = true;
+  $("main").hidden = false;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  // Scroll suave a la sección de cursos
+  setTimeout(() => {
+    document.getElementById("cursos")?.scrollIntoView({ behavior: "smooth" });
+  }, 120);
+}
+
+/** Renderiza las tabs de los 4 módulos. */
+function renderCourseViewTabs(course, prog) {
+  const nav = $("#cvTabs");
+  if (!nav) return;
+
+  const moduleLabels = [
+    { icon: "mic-2",      short: "Fonética" },
+    { icon: "book-open",  short: "Gramática" },
+    { icon: "layers",     short: "Vocabulario" },
+    { icon: "users",      short: "Uso real" },
+  ];
+
+  const modules = course.modules || [];
+
+  nav.innerHTML = modules.map((m, i) => {
+    const done   = prog.completedModules.includes(i);
+    const active = prog.currentModule === i;
+    const label  = moduleLabels[i] || { icon: "circle", short: `Módulo ${i + 1}` };
+    return `
+      <button class="cv-tab ${active ? "is-active" : ""} ${done ? "is-done" : ""}"
+              type="button" data-tab="${i}" role="tab"
+              aria-selected="${active}" aria-label="Módulo ${i + 1}: ${escapeHtml(m.title)}">
+        <span class="cv-tab-icon"><i data-lucide="${done ? "check-circle-2" : label.icon}"></i></span>
+        <span class="cv-tab-text">
+          <span class="cv-tab-num">Módulo ${i + 1}</span>
+          <span class="cv-tab-name">${escapeHtml(label.short)}</span>
+        </span>
+        ${done ? `<span class="cv-tab-done-pill">✓</span>` : ""}
+      </button>`;
+  }).join("");
+
+  refreshIcons();
+  updateCourseViewProgress(course, prog);
+
+  // Listeners de tabs
+  $$("[data-tab]", nav).forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const idx = Number(btn.dataset.tab);
+      prog.currentModule = idx;
+      saveState();
+      renderCourseViewTabs(course, prog);
+      renderCourseViewModule(course, prog, idx);
+    });
+  });
+}
+
+/** Actualiza la barra de progreso del curso en el topbar. */
+function updateCourseViewProgress(course, prog) {
+  const bar   = $("#cvProgressBar");
+  const label = $("#cvProgressLabel");
+  const total = course.modules ? course.modules.length : 4;
+  const done  = prog.completedModules.length;
+  const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
+  if (bar)   bar.style.width = pct + "%";
+  if (label) label.textContent = `${done} / ${total} módulos`;
+}
+
+/** Renderiza el contenido completo del módulo activo. */
+function renderCourseViewModule(course, prog, moduleIndex) {
+  const body = $("#cvBody");
+  if (!body) return;
+
+  // Intentar obtener el módulo del array 'modules', con respaldo en 'modules4'
+  let mod = (course.modules || [])[moduleIndex];
+  const hasModules4 = course.modules4 && course.modules4.length > moduleIndex;
+  if (!mod && hasModules4) {
+    mod = course.modules4[moduleIndex];
+  }
+
+  if (!mod) {
+    body.innerHTML = `<div class="deck-empty"><p>Este módulo aún no tiene contenido. Vuelve en la Ronda 2.</p></div>`;
+    return;
+  }
+
+  const lang    = LANG_BY_ID[course.langId] || {};
+  // Calcular el último índice considerando tanto modules como modules4
+  const modulesCount = (course.modules || []).length;
+  const modules4Count = course.modules4 ? course.modules4.length : 0;
+  const isLast  = moduleIndex === Math.max(modulesCount, modules4Count) - 1;
+  const isDone  = prog.completedModules.includes(moduleIndex);
+
+  // ── Sección intro ──────────────────────────────────────────────────────────
+  const introHtml = mod.intro
+    ? `<div class="cv-section">
+         <div class="cv-section-head"><i data-lucide="info"></i> Introducción</div>
+         <p class="cv-intro-text">${escapeHtml(mod.intro)}</p>
+       </div>`
+    : (Array.isArray(mod.points) && mod.points.length)
+      ? `<div class="cv-section">
+           <div class="cv-section-head"><i data-lucide="target"></i> Objetivos del módulo</div>
+           <ul class="cv-points-list">
+             ${mod.points.map((p) => `<li>${escapeHtml(p)}</li>`).join("")}
+           </ul>
+         </div>`
+      : "";
+
+  // ── Gramática ──────────────────────────────────────────────────────────────
+  const grammarHtml = Array.isArray(mod.grammar) && mod.grammar.length
+    ? `<div class="cv-section">
+         <div class="cv-section-head"><i data-lucide="book-open"></i> Gramática y estructura</div>
+         <div class="cv-grammar-list">
+           ${mod.grammar.map((g) => `
+             <div class="cv-grammar-item">
+               <div class="cv-grammar-rule">${escapeHtml(g.rule)}</div>
+               ${g.table ? renderGrammarTable(g.table) : ""}
+               <div class="cv-grammar-example">
+                 <span class="cv-grammar-ex-label">Ejemplo:</span>
+                 ${escapeHtml(g.example)}
+               </div>
+               ${g.note ? `<div class="cv-grammar-note"><i data-lucide="lightbulb"></i> ${escapeHtml(g.note)}</div>` : ""}
+               ${g.error ? `<div class="cv-grammar-error"><i data-lucide="x-circle"></i> Error frecuente: ${escapeHtml(g.error)}</div>` : ""}
+             </div>`).join("")}
+         </div>
+       </div>`
+    : "";
+
+  // ── Vocabulario ────────────────────────────────────────────────────────────
+  const vocabList = Array.isArray(mod.vocab) && mod.vocab.length
+    ? mod.vocab
+    : (Array.isArray(course.vocab) ? course.vocab : []);
+  const vocabHtml = Array.isArray(vocabList) && vocabList.length
+    ? `<div class="cv-section">
+         <div class="cv-section-head"><i data-lucide="layers"></i> Vocabulario (${vocabList.length} términos)</div>
+         <div class="cv-vocab-list">
+           ${vocabList.map((v, vi) => {
+             const vid     = `${course.id}-m${moduleIndex}-v${vi}`;
+             const learned = prog.learnedVocab.includes(vid);
+             return `
+               <div class="cv-vocab-item ${learned ? "is-learned" : ""}" data-vid="${vid}">
+                 <div class="cv-vocab-main">
+                   <div class="cv-vocab-term">${escapeHtml(v.term)}</div>
+                   <div class="cv-vocab-romaji">${escapeHtml(v.romaji || "")}</div>
+                   <div class="cv-vocab-meaning">${escapeHtml(v.meaning)}</div>
+                   ${v.example ? `<div class="cv-vocab-example">
+                     <span class="cv-vocab-ex-orig">${escapeHtml(v.example)}</span>
+                     <span class="cv-vocab-ex-tr">${escapeHtml(v.exampleTr || "")}</span>
+                   </div>` : ""}
+                 </div>
+                 <div class="cv-vocab-actions">
+                   <button class="cv-vocab-audio-btn" type="button"
+                           data-cv-audio-term="${escapeHtml(v.term)}"
+                           data-cv-audio-lang="${v.lang || lang.speech || 'es-MX'}"
+                           data-cv-audio-fallback="${v.fallback || lang.fallback || ''}"
+                           aria-label="Escuchar ${escapeHtml(v.term)}">
+                     <i data-lucide="volume-2"></i>
+                   </button>
+                   <button class="cv-vocab-learn-btn ${learned ? "is-learned" : ""}" type="button"
+                           data-cv-learn="${vid}"
+                           aria-label="${learned ? "Quitar de aprendidas" : "Marcar como aprendida"}">
+                     <i data-lucide="${learned ? "check-circle-2" : "circle"}"></i>
+                     <span>${learned ? "Aprendida" : "Marcar"}</span>
+                   </button>
+                   <button class="cv-vocab-global-btn" type="button"
+                           data-cv-global="${vid}"
+                           data-cv-global-term="${escapeHtml(v.term)}"
+                           data-cv-global-romaji="${escapeHtml(v.romaji || "")}"
+                           data-cv-global-meaning="${escapeHtml(v.meaning)}"
+                           data-cv-global-lang="${v.lang || lang.speech || 'es-MX'}"
+                           data-cv-global-langid="${course.langId}"
+                           data-cv-global-flag="${lang.flag || ''}"
+                           aria-label="Añadir a repaso global">
+                     <i data-lucide="plus-circle"></i>
+                     <span>+ Repaso</span>
+                   </button>
+                 </div>
+               </div>`;
+           }).join("")}
+         </div>
+       </div>`
+    : "";
+
+  // ── Diálogos ───────────────────────────────────────────────────────────────
+  const dialoguesHtml = Array.isArray(mod.dialogues) && mod.dialogues.length
+    ? `<div class="cv-section">
+         <div class="cv-section-head"><i data-lucide="messages-square"></i> Diálogos situacionales</div>
+         ${mod.dialogues.map((dlg, di) => `
+           <div class="cv-dialogue">
+             <div class="cv-dialogue-header">
+               <span class="cv-dialogue-title">${escapeHtml(dlg.title)}</span>
+               <span class="cv-register-badge register-${dlg.register}">${escapeHtml(dlg.register)}</span>
+             </div>
+             <div class="cv-dialogue-lines">
+               ${dlg.lines.map((ln, li) => `
+                 <div class="cv-dialogue-row">
+                   <span class="dialogue-who">${escapeHtml(ln.who)}</span>
+                   <div class="dialogue-line">
+                     <div class="dialogue-orig">
+                       ${escapeHtml(ln.line)}
+                       <button class="dialogue-audio" type="button"
+                               data-cv-dlg-audio-term="${escapeHtml(ln.line)}"
+                               data-cv-dlg-audio-lang="${lang.speech || 'es-MX'}"
+                               data-cv-dlg-audio-fallback="${lang.fallback || ''}"
+                               aria-label="Escuchar">
+                         <i data-lucide="volume-2"></i>
+                       </button>
+                     </div>
+                     <div class="dialogue-tr">${escapeHtml(ln.tr)}</div>
+                   </div>
+                 </div>`).join("")}
+             </div>
+           </div>`).join("")}
+       </div>`
+    : "";
+
+  // ── Quiz de comprensión ────────────────────────────────────────────────────
+  const quizHtml = Array.isArray(mod.quiz) && mod.quiz.length
+    ? `<div class="cv-section">
+         <div class="cv-section-head"><i data-lucide="circle-help"></i> Comprobación rápida</div>
+         <div class="cv-mini-quiz" id="cvMiniQuiz-${moduleIndex}">
+           ${mod.quiz.map((q, qi) => `
+             <div class="cv-quiz-item" data-qi="${qi}" data-correct="${q.correct}">
+               <p class="cv-quiz-q">${qi + 1}. ${escapeHtml(q.q)}</p>
+               <div class="cv-quiz-opts">
+                 ${q.options.map((opt, oi) => `
+                   <button class="cv-quiz-opt" type="button" data-oi="${oi}">
+                     <span class="key">${String.fromCharCode(65 + oi)}</span>
+                     ${escapeHtml(opt)}
+                   </button>`).join("")}
+               </div>
+               <p class="cv-quiz-feedback" id="cvqf-${moduleIndex}-${qi}"></p>
+               ${q.explain ? `<p class="cv-quiz-explain" id="cvqe-${moduleIndex}-${qi}" hidden>
+                 <i data-lucide="lightbulb"></i> ${escapeHtml(q.explain)}
+               </p>` : ""}
+             </div>`).join("")}
+         </div>
+       </div>`
+    : "";
+
+  // ── Plan diario (solo módulo 4) ────────────────────────────────────────────
+  const planHtml = Array.isArray(mod.dailyPlan) && mod.dailyPlan.length
+    ? `<div class="cv-section cv-daily-plan">
+         <div class="cv-section-head"><i data-lucide="calendar-check"></i> Plan de práctica diaria (15 min)</div>
+         <div class="cv-plan-steps">
+           ${mod.dailyPlan.map((step, si) => `
+             <div class="cv-plan-step">
+               <span class="cv-plan-time">${escapeHtml(step.time)}</span>
+               <span class="cv-plan-activity">${escapeHtml(step.activity)}</span>
+             </div>`).join("")}
+         </div>
+       </div>`
+    : "";
+
+  // ── Botón de módulo completado ─────────────────────────────────────────────
+  const doneBarHtml = `
+    <div class="cv-done-bar">
+      <div class="cv-done-bar-info">
+        ${isDone
+          ? `<i data-lucide="check-circle-2"></i> <span>Módulo completado.</span>`
+          : `<i data-lucide="circle"></i> <span>Cuando termines, marca el módulo como completado.</span>`}
+      </div>
+      <div class="cv-done-bar-actions">
+        <button class="btn ${isDone ? "btn-ghost" : "btn-accent"}" type="button" id="cvMarkModuleBtn"
+                data-course="${course.id}" data-module="${moduleIndex}">
+          <i data-lucide="${isDone ? "rotate-ccw" : "check"}"></i>
+          ${isDone ? "Desmarcar módulo" : "Marcar como completado"}
+        </button>
+        ${!isLast
+          ? `<button class="btn btn-primary" type="button" id="cvNextModuleBtn">
+               Siguiente módulo <i data-lucide="arrow-right"></i>
+             </button>`
+          : isCourseCompleted(course)
+            ? `<button class="btn btn-ghost" type="button" id="cvToggleCourseBtn" data-course="${course.id}">
+                 <i data-lucide="rotate-ccw"></i> Quitar de completados
+               </button>`
+            : `<button class="btn btn-primary" type="button" id="cvToggleCourseBtn" data-course="${course.id}">
+                 <i data-lucide="award"></i> Marcar curso completo
+               </button>`
+        }
+      </div>
+    </div>`;
+
+  body.innerHTML = `
+    <div class="cv-module-header" style="background:${course.cover}">
+      <span class="cv-mod-num">Módulo ${moduleIndex + 1} de ${course.modules.length}</span>
+      <h2 class="cv-mod-title">${escapeHtml(mod.title)}</h2>
+      ${mod.summary ? `<p class="cv-mod-summary">${escapeHtml(mod.summary)}</p>` : ""}
+    </div>
+    ${introHtml}
+    ${grammarHtml}
+    ${vocabHtml}
+    ${dialoguesHtml}
+    ${quizHtml}
+    ${planHtml}
+    ${doneBarHtml}
+  `;
+
+  refreshIcons();
+  attachCourseViewEvents(course, prog, moduleIndex);
+}
+
+/** Renderiza una tabla gramatical de sustitución. */
+function renderGrammarTable(table) {
+  if (!table || !Array.isArray(table.rows)) return "";
+  const headerHtml = Array.isArray(table.headers)
+    ? `<thead><tr>${table.headers.map((h) => `<th>${escapeHtml(h)}</th>`).join("")}</tr></thead>`
+    : "";
+  const bodyHtml = table.rows
+    .map((row) => `<tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`)
+    .join("");
+  return `<div class="cv-table-wrap"><table class="cv-grammar-table">${headerHtml}<tbody>${bodyHtml}</tbody></table></div>`;
+}
+
+/** Adjunta todos los event listeners de la vista de módulo. */
+function attachCourseViewEvents(course, prog, moduleIndex) {
+  const body = $("#cvBody");
+  const mod  = course.modules[moduleIndex];
+  const lang = LANG_BY_ID[course.langId] || {};
+
+  // Audio de vocabulario
+  $$("[data-cv-audio-term]", body).forEach((btn) => {
+    btn.addEventListener("click", () => {
+      speak(btn.dataset.cvAudioTerm, btn.dataset.cvAudioLang, btn, btn.dataset.cvAudioFallback || null);
+    });
+  });
+
+  // Audio de diálogos
+  $$("[data-cv-dlg-audio-term]", body).forEach((btn) => {
+    btn.addEventListener("click", () => {
+      speak(btn.dataset.cvDlgAudioTerm, btn.dataset.cvDlgAudioLang, btn, btn.dataset.cvDlgAudioFallback || null);
+    });
+  });
+
+  // Marcar vocab como aprendida
+  $$("[data-cv-learn]", body).forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const vid = btn.dataset.cvLearn;
+      const isLearned = prog.learnedVocab.includes(vid);
+      if (isLearned) {
+        prog.learnedVocab = prog.learnedVocab.filter((x) => x !== vid);
+      } else {
+        prog.learnedVocab.push(vid);
+        registerStudyActivity(1);
+      }
+      saveState();
+      // Actualizar visualmente sin re-renderizar todo
+      const item = body.querySelector(`[data-vid="${vid}"]`);
+      if (item) item.classList.toggle("is-learned", !isLearned);
+      btn.classList.toggle("is-learned", !isLearned);
+      btn.innerHTML = `<i data-lucide="${!isLearned ? "check-circle-2" : "circle"}"></i><span>${!isLearned ? "Aprendida" : "Marcar"}</span>`;
+      refreshIcons();
+    });
+  });
+
+  // Añadir vocab a repaso global
+  $$("[data-cv-global]", body).forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const vid     = btn.dataset.cvGlobal;
+      const term    = btn.dataset.cvGlobalTerm;
+      const romaji  = btn.dataset.cvGlobalRomaji;
+      const meaning = btn.dataset.cvGlobalMeaning;
+      const langCode= btn.dataset.cvGlobalLang;
+      const langId  = btn.dataset.cvGlobalLangid;
+      const flag    = btn.dataset.cvGlobalFlag;
+
+      // Crear id único para VOCAB_CARDS dinámico
+      const globalId = `dyn-${vid}`;
+      const already  = VOCAB_CARDS.some((c) => c.id === globalId) || state.review.includes(globalId);
+      if (already) {
+        showToast("Ya en repaso", `«${term}» ya está en tus tarjetas de repaso.`, "info");
+        return;
+      }
+      // Añadir a VOCAB_CARDS en memoria y a state.review
+      VOCAB_CARDS.push({ id: globalId, langId, flag, term, romaji, meaning, lang: langCode });
+      state.review.push(globalId);
+      saveState();
+      showToast("Añadida al repaso", `«${term}» se sumó a tus tarjetas globales de estudio.`, "success");
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="check"></i><span>En repaso</span>`;
+      refreshIcons();
+    });
+  });
+
+  // Mini-quiz de comprensión
+  if (Array.isArray(mod.quiz)) {
+    mod.quiz.forEach((q, qi) => {
+      const container = body.querySelector(`[data-qi="${qi}"]`);
+      if (!container) return;
+      $$(".cv-quiz-opt", container).forEach((optBtn) => {
+        optBtn.addEventListener("click", () => {
+          if (container.dataset.answered) return;
+          container.dataset.answered = "1";
+          const oi        = Number(optBtn.dataset.oi);
+          const correct   = Number(container.dataset.correct);
+          const feedback  = body.querySelector(`#cvqf-${moduleIndex}-${qi}`);
+          const explainEl = body.querySelector(`#cvqe-${moduleIndex}-${qi}`);
+          $$(".cv-quiz-opt", container).forEach((b) => {
+            b.disabled = true;
+            if (Number(b.dataset.oi) === correct) b.classList.add("is-correct");
+            else if (Number(b.dataset.oi) === oi)  b.classList.add("is-wrong");
+          });
+          if (feedback) {
+            feedback.className = `cv-quiz-feedback ${oi === correct ? "ok" : "bad"}`;
+            feedback.textContent = oi === correct ? "✓ ¡Correcto!" : "✗ Incorrecto.";
+          }
+          if (explainEl) explainEl.hidden = false;
+          if (oi !== correct) {
+            const cardId = QUIZ_REVIEW_CARD[qi] || null;
+            if (cardId && !state.review.includes(cardId)) {
+              state.review.push(cardId);
+              saveState();
+            }
+          }
+          registerStudyActivity(1);
+          refreshIcons();
+        });
+      });
+    });
+  }
+
+  // Marcar módulo como completado
+  $("#cvMarkModuleBtn")?.addEventListener("click", () => {
+    const isDone = prog.completedModules.includes(moduleIndex);
+    if (isDone) {
+      prog.completedModules = prog.completedModules.filter((x) => x !== moduleIndex);
+    } else {
+      if (!prog.completedModules.includes(moduleIndex)) prog.completedModules.push(moduleIndex);
+      showToast("Módulo completado ✓", `Módulo ${moduleIndex + 1} de «${course.title}» marcado.`, "success");
+    }
+    saveState();
+    renderCourseViewTabs(course, prog);
+    renderCourseViewModule(course, prog, moduleIndex);
+    renderCourses(); // actualizar mini-progress del catálogo
+  });
+
+  // Siguiente módulo
+  $("#cvNextModuleBtn")?.addEventListener("click", () => {
+    const next = moduleIndex + 1;
+    if (next < course.modules.length) {
+      prog.currentModule = next;
+      saveState();
+      renderCourseViewTabs(course, prog);
+      renderCourseViewModule(course, prog, next);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  });
+
+  // Marcar curso completo
+  $("#cvToggleCourseBtn")?.addEventListener("click", () => {
+    toggleCourseCompleted(course.id);
+    renderCourseViewModule(course, prog, moduleIndex);
+  });
+}
+function toggleCourseCompleted(courseId) {
+  const course = COURSES.find((c) => c.id === courseId);
+  if (!course) return;
   if (isCourseCompleted(course)) {
     state.completed = state.completed.filter((id) => id !== courseId);
     showToast("Curso reabierto", `«${course.title}» ya no cuenta como completado.`, "info");
@@ -1038,7 +1261,6 @@ function toggleCourseCompleted(courseId) {
   saveState();
   renderCourses();
   renderProgress();
-  openCourseModal(courseId); // refresca el modal con el nuevo estado
 }
 
 /* ============================================================================

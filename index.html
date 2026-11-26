@@ -1,527 +1,560 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LinguaCraft · Aprende idiomas y cultura</title>
-  <meta name="description" content="LinguaCraft: plataforma EdTech para aprender idiomas y cultura con 10 idiomas, 15 cursos, traductor en vivo, tarjetas de vocabulario y guías culturales." />
-  <meta name="theme-color" content="#4F46E5" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LinguaCraft · Aprende idiomas y cultura</title>
+    <meta name="description" content="LinguaCraft: plataforma EdTech para aprender idiomas y cultura con 10 idiomas, 15 cursos, traductor en vivo, tarjetas de vocabulario y guías culturales." />
+    <meta name="theme-color" content="#4F46E5" />
 
-  <!-- Tipografías -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <!-- Tipografías -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
-  <!-- Estilos -->
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
+    <!-- Estilos -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
 
-  <!-- Barra de progreso de lectura -->
-  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
-
-  <!-- ============================================================
-       NAVBAR (sticky + backdrop-filter blur)
-  ============================================================= -->
-  <header class="navbar" id="navbar">
-    <div class="container nav-inner">
-      <a href="#inicio" class="brand" aria-label="LinguaCraft, ir al inicio">
-        <span class="brand-mark"><i data-lucide="languages"></i></span>
-        <span class="brand-name">Lingua<span>Craft</span></span>
-      </a>
-
-      <nav class="nav-links" id="navLinks" aria-label="Navegación principal">
-        <a href="#inicio" class="nav-link is-active">Inicio</a>
-        <a href="#idiomas" class="nav-link">Idiomas</a>
-        <a href="#cursos" class="nav-link">Cursos</a>
-        <a href="#practica" class="nav-link">Práctica</a>
-        <a href="#cultura" class="nav-link">Cultura</a>
-        <a href="#planes" class="nav-link">Planes</a>
-      </nav>
-
-      <div class="nav-actions">
-        <span class="plan-badge" id="planBadge" data-plan="free" title="Tu plan actual">
-          <i data-lucide="star"></i>
-          <span id="planBadgeText">Plan Gratuito</span>
-        </span>
-        <button class="icon-btn" id="themeToggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema">
-          <i data-lucide="moon"></i>
-        </button>
-        <button class="btn btn-primary btn-sm" id="openSignupBtn" type="button">
-          <i data-lucide="user-plus"></i>
-          <span>Registrarse</span>
-        </button>
-        <button class="nav-toggle" id="navToggle" type="button" aria-label="Abrir menú" aria-expanded="false">
-          <i data-lucide="menu"></i>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <main>
+    <!-- Barra de progreso de lectura -->
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
     <!-- ============================================================
-         HERO
+         NAVBAR (sticky + backdrop-filter blur)
     ============================================================= -->
-    <section class="hero" id="inicio">
-      <div class="hero-glow" aria-hidden="true"></div>
-      <div class="container hero-inner">
-
-        <div class="hero-copy">
-          <span class="pill reveal">
-            <i data-lucide="sparkles"></i> Plataforma EdTech · Proyecto escolar
-          </span>
-          <h1 class="reveal">
-            Aprende idiomas y cultura <span class="grad">de verdad</span>, a tu ritmo.
-          </h1>
-          <p class="lead reveal">
-            <strong>10 idiomas</strong>, <strong>15 cursos</strong> con material completo, traductor con audio,
-            tarjetas de vocabulario, racha diaria y guías culturales. Todo en español y sin instalar nada.
-          </p>
-
-          <div class="hero-cta reveal">
-            <a href="#cursos" class="btn btn-primary btn-lg">
-              <i data-lucide="compass"></i> Explorar Cursos
-            </a>
-            <a href="#practica" class="btn btn-ghost btn-lg">
-              <i data-lucide="languages"></i> Probar el Traductor
-            </a>
-          </div>
-
-          <div class="hero-stats">
-            <article class="stat-card reveal">
-              <span class="stat-icon"><i data-lucide="book-open"></i></span>
-              <div>
-                <strong>15</strong>
-                <span>Cursos (5 gratis)</span>
-              </div>
-            </article>
-            <article class="stat-card reveal">
-              <span class="stat-icon"><i data-lucide="globe-2"></i></span>
-              <div>
-                <strong>10</strong>
-                <span>Idiomas disponibles</span>
-              </div>
-            </article>
-            <article class="stat-card reveal">
-              <span class="stat-icon"><i data-lucide="award"></i></span>
-              <div>
-                <strong>Certificación</strong>
-                <span>Imprimible en plan Pro</span>
-              </div>
-            </article>
-          </div>
-        </div>
-
-        <aside class="hero-visual reveal" aria-hidden="true">
-          <div class="mock-card">
-            <div class="mock-head">
-              <span class="mock-dots"><i></i><i></i><i></i></span>
-              <span class="mock-tag">Lección en vivo</span>
-            </div>
-            <p class="mock-word">こんにちは <button class="mini-audio" type="button" tabindex="-1"><i data-lucide="volume-2"></i></button></p>
-            <p class="mock-sub">Konnichiwa · Hola</p>
-            <div class="mock-rows">
-              <div class="mock-row"><span>🇯🇵 Japonés</span><span class="bar"><i style="width:82%"></i></span></div>
-              <div class="mock-row"><span>🇨🇳 Chino</span><span class="bar"><i style="width:68%"></i></span></div>
-              <div class="mock-row"><span>🇩🇪 Alemán</span><span class="bar"><i style="width:54%"></i></span></div>
-              <div class="mock-row"><span>🇰🇷 Coreano</span><span class="bar"><i style="width:47%"></i></span></div>
-            </div>
-            <div class="mock-foot">
-              <i data-lucide="flame"></i> Racha de 12 días
-            </div>
-          </div>
-        </aside>
-
-      </div>
-    </section>
-
-    <!-- ============================================================
-         IDIOMAS (10)
-    ============================================================= -->
-    <section class="section section-soft" id="idiomas">
-      <div class="container">
-        <header class="section-head">
-          <span class="eyebrow"><i data-lucide="globe-2"></i> Idiomas</span>
-          <h2>10 idiomas, del inglés al náhuatl</h2>
-          <p>Cada idioma incluye frases clave con audio y su contexto cultural. Pulsa el altavoz para escucharlas.</p>
-        </header>
-        <div class="lang-grid" id="langGrid"><!-- Renderizado por app.js --></div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         CATÁLOGO DE CURSOS (15)
-    ============================================================= -->
-    <section class="section" id="cursos">
-      <div class="container">
-        <header class="section-head">
-          <span class="eyebrow"><i data-lucide="graduation-cap"></i> Catálogo</span>
-          <h2>15 cursos con material completo</h2>
-          <p>Cada curso incluye 3 módulos, vocabulario con audio, un diálogo y una nota cultural. Empieza gratis y desbloquea los PRO.</p>
-        </header>
-
-        <div class="filters" id="courseFilters" role="tablist" aria-label="Filtrar cursos">
-          <button class="chip is-active" data-filter="all"  type="button">Todos</button>
-          <button class="chip" data-filter="free" type="button"><i data-lucide="unlock"></i> Gratis</button>
-          <button class="chip" data-filter="pro"  type="button"><i data-lucide="crown"></i> PRO</button>
-        </div>
-
-        <div class="filters filters-sub" id="levelFilters" aria-label="Filtrar por nivel">
-          <button class="chip chip-sm is-active" data-level="all" type="button">Todos los niveles</button>
-          <button class="chip chip-sm" data-level="Básico" type="button">Básico</button>
-          <button class="chip chip-sm" data-level="Intermedio" type="button">Intermedio</button>
-          <button class="chip chip-sm" data-level="Avanzado" type="button">Avanzado</button>
-          <button class="chip chip-sm" data-level="Conversación" type="button">Conversación</button>
-          <button class="chip chip-sm" data-level="Cultura" type="button">Cultura</button>
-        </div>
-
-        <div class="course-grid" id="courseGrid"><!-- Renderizado por app.js --></div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         ZONA DE ESTUDIO: tarjetas de vocabulario + progreso
-    ============================================================= -->
-    <section class="section section-soft" id="estudio">
-      <div class="container">
-        <header class="section-head">
-          <span class="eyebrow"><i data-lucide="layers"></i> Zona de estudio</span>
-          <h2>Tarjetas de vocabulario y tu progreso</h2>
-          <p>20 tarjetas con audio. Voltea, autoevalúate y marca las que quieras repasar. Tu racha y meta se guardan en este navegador.</p>
-        </header>
-
-        <!-- Panel de progreso: racha + meta -->
-        <div class="progress-panel" id="progressPanel"><!-- Renderizado por app.js --></div>
-
-        <!-- Tarjetas -->
-        <div class="deck-toolbar">
-          <div class="filters filters-sub" id="deckFilters" aria-label="Filtrar tarjetas">
-            <button class="chip chip-sm is-active" data-deck="all" type="button">Todas</button>
-            <button class="chip chip-sm" data-deck="review" type="button"><i data-lucide="star"></i> Repaso pendiente <span class="count-pill" id="reviewCount">0</span></button>
-          </div>
-          <div class="select-wrap select-lang">
-            <select id="deckLangFilter" aria-label="Filtrar por idioma">
-              <option value="all">Todos los idiomas</option>
-            </select>
-            <i data-lucide="chevron-down"></i>
-          </div>
-        </div>
-
-        <div class="deck-grid" id="deckGrid"><!-- Renderizado por app.js --></div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         TRADUCTOR + QUIZ
-    ============================================================= -->
-    <section class="section" id="practica">
-      <div class="container">
-        <header class="section-head">
-          <span class="eyebrow"><i data-lucide="wand-2"></i> Zona interactiva · Gratis</span>
-          <h2>Practica aquí mismo, sin registrarte</h2>
-          <p>Traduce en tiempo real con audio y pon a prueba lo que sabes con un quiz de 8 preguntas.</p>
-        </header>
-
-        <div class="practice-grid">
-
-          <!-- Traductor instantáneo -->
-          <article class="panel" id="translatorPanel">
-            <div class="panel-head">
-              <span class="panel-icon"><i data-lucide="languages"></i></span>
-              <div>
-                <h3>Traductor Instantáneo</h3>
-                <p>Español → 8 idiomas, con pronunciación</p>
-              </div>
-            </div>
-
-            <form class="translator-form" id="translatorForm">
-              <label class="field">
-                <span class="field-label">Texto en español</span>
-                <textarea id="sourceText" rows="3" placeholder="Escribe una palabra o frase… p. ej. «¿Dónde está la estación?»"></textarea>
-              </label>
-
-              <label class="field">
-                <span class="field-label">Traducir a</span>
-                <div class="select-wrap">
-                  <select id="targetLang"><!-- Renderizado por app.js --></select>
-                  <i data-lucide="chevron-down"></i>
-                </div>
-              </label>
-
-              <div class="translator-actions">
-                <button class="btn btn-primary" type="submit" id="translateBtn">
-                  <i data-lucide="sparkles"></i> Traducir
-                </button>
-                <button class="btn btn-ghost" type="button" id="clearTranslateBtn">
-                  <i data-lucide="eraser"></i> Limpiar
-                </button>
-              </div>
-            </form>
-
-            <div class="translate-result" id="translateResult" hidden>
-              <div class="result-head">
-                <span class="result-label"><i data-lucide="arrow-right-left"></i> Resultado</span>
-                <button class="btn btn-accent btn-sm" type="button" id="speakResultBtn">
-                  <i data-lucide="volume-2"></i> Escuchar
-                </button>
-              </div>
-              <p class="result-text" id="resultText"></p>
-              <p class="result-note" id="resultNote"></p>
-            </div>
-
-            <p class="panel-foot">
-              <i data-lucide="info"></i> Traducción por <strong>MyMemory API</strong> (8 idiomas) · Audio con la voz del navegador.
-            </p>
-          </article>
-
-          <!-- Mini-Quiz -->
-          <article class="panel" id="quizPanel">
-            <div class="panel-head">
-              <span class="panel-icon"><i data-lucide="circle-help"></i></span>
-              <div>
-                <h3>Quiz de Idiomas</h3>
-                <p>8 preguntas · explicación tras cada respuesta</p>
-              </div>
-            </div>
-
-            <div class="quiz-progress">
-              <span class="quiz-progress-bar"><i id="quizBar"></i></span>
-              <span class="quiz-counter" id="quizCounter">Pregunta 1 de 8</span>
-            </div>
-
-            <div id="quizBody"><!-- Renderizado por app.js --></div>
-
-            <div class="quiz-result" id="quizResult" hidden>
-              <span class="quiz-score" id="quizScore">0 / 8</span>
-              <h4 id="quizVerdict">¡Buen intento!</h4>
-              <p id="quizMessage"></p>
-              <button class="btn btn-primary" type="button" id="quizResetBtn">
-                <i data-lucide="rotate-ccw"></i> Reiniciar quiz
-              </button>
-            </div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         CULTURA (6 guías)
-    ============================================================= -->
-    <section class="section section-soft" id="cultura">
-      <div class="container">
-        <header class="section-head">
-          <span class="eyebrow"><i data-lucide="landmark"></i> Cultura</span>
-          <h2>6 guías culturales completas</h2>
-          <p>Artículos breves que explican el «por qué» detrás de cada idioma. Abre cualquiera para leerlo completo.</p>
-        </header>
-        <div class="guide-grid" id="guideGrid"><!-- Renderizado por app.js --></div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         FALSOS AMIGOS Y MODISMOS
-    ============================================================= -->
-    <section class="section" id="expresiones">
-      <div class="container">
-        <header class="section-head">
-          <span class="eyebrow"><i data-lucide="triangle-alert"></i> Expresiones</span>
-          <h2>Falsos amigos y modismos</h2>
-          <p>Palabras que parecen una cosa y significan otra, más los modismos que delatan a un nativo.</p>
-        </header>
-        <div class="exp-grid" id="expGrid"><!-- Renderizado por app.js --></div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         PLANES Y SUSCRIPCIONES
-    ============================================================= -->
-    <section class="section section-soft" id="planes">
-      <div class="container">
-        <header class="section-head">
-          <span class="eyebrow"><i data-lucide="credit-card"></i> Suscripciones</span>
-          <h2>Elige el plan que va contigo</h2>
-          <p>Cambia o cancela cuando quieras. Al suscribirte recibirás un correo de confirmación real.</p>
-        </header>
-
-        <div class="billing-toggle" role="group" aria-label="Periodo de facturación">
-          <button class="bill-btn is-active" id="billMonthly" type="button">Mensual</button>
-          <button class="bill-btn" id="billAnnual" type="button">Anual <span class="save-tag" id="saveTag"></span></button>
-        </div>
-
-        <div class="plans-grid" id="plansGrid"><!-- Renderizado por app.js --></div>
-
-        <p class="plans-note">
-          <i data-lucide="shield-check"></i>
-          Pagos simulados para fines demostrativos. No se realiza ningún cobro real.
-        </p>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         ACERCA DEL PROYECTO
-    ============================================================= -->
-    <section class="section" id="acerca">
-      <div class="container">
-        <header class="section-head">
-          <span class="eyebrow"><i data-lucide="info"></i> Acerca del Proyecto</span>
-          <h2>Cómo funciona LinguaCraft por dentro</h2>
-          <p>Un proyecto escolar de preparatoria construido con tecnologías web estándar y APIs gratuitas.</p>
-        </header>
-
-        <div class="about-grid">
-          <article class="about-card">
-            <span class="panel-icon"><i data-lucide="mail-check"></i></span>
-            <h3>EmailJS</h3>
-            <p>Envía correos reales de bienvenida y confirmación de suscripción al Gmail del usuario, directamente desde el navegador y sin backend. Incluye modo simulación si no hay claves configuradas.</p>
-          </article>
-          <article class="about-card">
-            <span class="panel-icon"><i data-lucide="languages"></i></span>
-            <h3>MyMemory API</h3>
-            <p>API REST gratuita de traducción que no requiere clave. Traduce del español a 8 idiomas en tiempo real y devuelve variantes alternativas de cada frase.</p>
-          </article>
-          <article class="about-card">
-            <span class="panel-icon"><i data-lucide="volume-2"></i></span>
-            <h3>Web Speech API</h3>
-            <p>Usa <code>window.speechSynthesis</code>, ya incluida en el navegador, para leer en voz alta el vocabulario y los diálogos con la voz nativa de cada idioma.</p>
-          </article>
-          <article class="about-card">
-            <span class="panel-icon"><i data-lucide="database"></i></span>
-            <h3>localStorage</h3>
-            <p>Guarda tu plan activo, tu racha diaria, la meta de estudio, las tarjetas marcadas para repaso y los cursos completados sin necesidad de una base de datos.</p>
-          </article>
-          <article class="about-card">
-            <span class="panel-icon"><i data-lucide="code-2"></i></span>
-            <h3>HTML5 · CSS3 · JS Vanilla</h3>
-            <p>Sin frameworks: variables CSS, Flexbox y Grid, JavaScript ES6+ con iconos Lucide y tipografía Plus Jakarta Sans. Todo servido como archivos estáticos.</p>
-          </article>
-          <article class="about-card">
-            <span class="panel-icon"><i data-lucide="server"></i></span>
-            <h3>¿Cómo escalaría a un backend real?</h3>
-            <p>Con una API (Node, PHP o Python) y una base de datos se sustituiría localStorage: cuentas de usuario autenticadas, progreso sincronizado entre dispositivos, pagos reales con Stripe o Mercado Pago, y correos enviados desde el servidor.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ============================================================
-       FOOTER
-  ============================================================= -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <a href="#inicio" class="brand">
+    <header class="navbar" id="navbar">
+      <div class="container nav-inner">
+        <a href="#inicio" class="brand" aria-label="LinguaCraft, ir al inicio">
           <span class="brand-mark"><i data-lucide="languages"></i></span>
           <span class="brand-name">Lingua<span>Craft</span></span>
         </a>
-        <p>Aprende idiomas y cultura con una experiencia moderna, clara y completamente en español.</p>
+
+        <nav class="nav-links" id="navLinks" aria-label="Navegación principal">
+          <a href="#inicio" class="nav-link is-active">Inicio</a>
+          <a href="#idiomas" class="nav-link">Idiomas</a>
+          <a href="#cursos" class="nav-link">Cursos</a>
+          <a href="#practica" class="nav-link">Práctica</a>
+          <a href="#cultura" class="nav-link">Cultura</a>
+          <a href="#planes" class="nav-link">Planes</a>
+        </nav>
+
+        <div class="nav-actions">
+          <span class="plan-badge" id="planBadge" data-plan="free" title="Tu plan actual">
+            <i data-lucide="star"></i>
+            <span id="planBadgeText">Plan Gratuito</span>
+          </span>
+          <button class="icon-btn" id="themeToggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema">
+            <i data-lucide="moon"></i>
+          </button>
+          <button class="btn btn-primary btn-sm" id="openSignupBtn" type="button">
+            <i data-lucide="user-plus"></i>
+            <span>Registrarse</span>
+          </button>
+          <button class="nav-toggle" id="navToggle" type="button" aria-label="Abrir menú" aria-expanded="false">
+            <i data-lucide="menu"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- ============================================================
+           HERO
+      ============================================================= -->
+      <section class="hero" id="inicio">
+        <div class="hero-glow" aria-hidden="true"></div>
+        <div class="container hero-inner">
+
+          <div class="hero-copy">
+            <span class="pill reveal">
+              <i data-lucide="sparkles"></i> Plataforma EdTech · Proyecto escolar
+            </span>
+            <h1 class="reveal">
+              Aprende idiomas y cultura <span class="grad">de verdad</span>, a tu ritmo.
+            </h1>
+            <p class="lead reveal">
+              <strong>10 idiomas</strong>, <strong>15 cursos</strong> con material completo, traductor con audio,
+              tarjetas de vocabulario, racha diaria y guías culturales. Todo en español y sin instalar nada.
+            </p>
+
+            <div class="hero-cta reveal">
+              <a href="#cursos" class="btn btn-primary btn-lg">
+                <i data-lucide="compass"></i> Explorar Cursos
+              </a>
+              <a href="#practica" class="btn btn-ghost btn-lg">
+                <i data-lucide="languages"></i> Probar el Traductor
+              </a>
+            </div>
+
+            <div class="hero-stats">
+              <article class="stat-card reveal">
+                <span class="stat-icon"><i data-lucide="book-open"></i></span>
+                <div>
+                  <strong>15</strong>
+                  <span>Cursos (5 gratis)</span>
+                </div>
+              </article>
+              <article class="stat-card reveal">
+                <span class="stat-icon"><i data-lucide="globe-2"></i></span>
+                <div>
+                  <strong>10</strong>
+                  <span>Idiomas disponibles</span>
+                </div>
+              </article>
+              <article class="stat-card reveal">
+                <span class="stat-icon"><i data-lucide="award"></i></span>
+                <div>
+                  <strong>Certificación</strong>
+                  <span>Imprimible en plan Pro</span>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <aside class="hero-visual reveal" aria-hidden="true">
+            <div class="mock-card">
+              <div class="mock-head">
+                <span class="mock-dots"><i></i><i></i><i></i></span>
+                <span class="mock-tag">Lección en vivo</span>
+              </div>
+              <p class="mock-word">こんにちは <button class="mini-audio" type="button" tabindex="-1"><i data-lucide="volume-2"></i></button></p>
+              <p class="mock-sub">Konnichiwa · Hola</p>
+              <div class="mock-rows">
+                <div class="mock-row"><span>🇯🇵 Japonés</span><span class="bar"><i style="width:82%"></i></span></div>
+                <div class="mock-row"><span>🇨🇳 Chino</span><span class="bar"><i style="width:68%"></i></span></div>
+                <div class="mock-row"><span>🇩🇪 Alemán</span><span class="bar"><i style="width:54%"></i></span></div>
+                <div class="mock-row"><span>🇰🇷 Coreano</span><span class="bar"><i style="width:47%"></i></span></div>
+              </div>
+              <div class="mock-foot">
+                <i data-lucide="flame"></i> Racha de 12 días
+              </div>
+            </div>
+          </aside>
+
+        </div>
+      </section>
+
+      <!-- ============================================================
+           IDIOMAS (10)
+      ============================================================= -->
+      <section class="section section-soft" id="idiomas">
+        <div class="container">
+          <header class="section-head">
+            <span class="eyebrow"><i data-lucide="globe-2"></i> Idiomas</span>
+            <h2>10 idiomas, del inglés al náhuatl</h2>
+            <p>Cada idioma incluye frases clave con audio y su contexto cultural. Pulsa el altavoz para escucharlas.</p>
+          </header>
+          <div class="lang-grid" id="langGrid"><!-- Renderizado por app.js --></div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           CATÁLOGO DE CURSOS (15)
+      ============================================================= -->
+      <section class="section" id="cursos">
+        <div class="container">
+          <header class="section-head">
+            <span class="eyebrow"><i data-lucide="graduation-cap"></i> Catálogo</span>
+            <h2>15 cursos con material completo</h2>
+            <p>Cada curso incluye 3 módulos, vocabulario con audio, un diálogo y una nota cultural. Empieza gratis y desbloquea los PRO.</p>
+          </header>
+
+          <div class="filters" id="courseFilters" role="tablist" aria-label="Filtrar cursos">
+            <button class="chip is-active" data-filter="all"  type="button">Todos</button>
+            <button class="chip" data-filter="free" type="button"><i data-lucide="unlock"></i> Gratis</button>
+            <button class="chip" data-filter="pro"  type="button"><i data-lucide="crown"></i> PRO</button>
+          </div>
+
+          <div class="filters filters-sub" id="levelFilters" aria-label="Filtrar por nivel">
+            <button class="chip chip-sm is-active" data-level="all" type="button">Todos los niveles</button>
+            <button class="chip chip-sm" data-level="Básico" type="button">Básico</button>
+            <button class="chip chip-sm" data-level="Intermedio" type="button">Intermedio</button>
+            <button class="chip chip-sm" data-level="Avanzado" type="button">Avanzado</button>
+            <button class="chip chip-sm" data-level="Conversación" type="button">Conversación</button>
+            <button class="chip chip-sm" data-level="Cultura" type="button">Cultura</button>
+          </div>
+
+          <div class="course-grid" id="courseGrid"><!-- Renderizado por app.js --></div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           ZONA DE ESTUDIO: tarjetas de vocabulario + progreso
+      ============================================================= -->
+      <section class="section section-soft" id="estudio">
+        <div class="container">
+          <header class="section-head">
+            <span class="eyebrow"><i data-lucide="layers"></i> Zona de estudio</span>
+            <h2>Tarjetas de vocabulario y tu progreso</h2>
+            <p>20 tarjetas con audio. Voltea, autoevalúa y marca las que quieras repasar. Tu racha y meta se guardan en este navegador.</p>
+          </header>
+
+          <!-- Panel de progreso: racha + meta -->
+          <div class="progress-panel" id="progressPanel"><!-- Renderizado por app.js --></div>
+
+          <!-- Tarjetas -->
+          <div class="deck-toolbar">
+            <div class="filters filters-sub" id="deckFilters" aria-label="Filtrar tarjetas">
+              <button class="chip chip-sm is-active" data-deck="all" type="button">Todas</button>
+              <button class="chip chip-sm" data-deck="review" type="button"><i data-lucide="star"></i> Repaso pendiente <span class="count-pill" id="reviewCount">0</span></button>
+            </div>
+            <div class="select-wrap select-lang">
+              <select id="deckLangFilter" aria-label="Filtrar por idioma">
+                <option value="all">Todos los idiomas</option>
+              </select>
+              <i data-lucide="chevron-down"></i>
+            </div>
+          </div>
+
+          <div class="deck-grid" id="deckGrid"><!-- Renderizado por app.js --></div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           TRADUCTOR + QUIZ
+      ============================================================= -->
+      <section class="section" id="practica">
+        <div class="container">
+          <header class="section-head">
+            <span class="eyebrow"><i data-lucide="wand-2"></i> Zona interactiva · Gratis</span>
+            <h2>Practica aquí mismo, sin registrarte</h2>
+            <p>Traduce en tiempo real con audio y pon a prueba lo que sabes con un quiz de 8 preguntas.</p>
+          </header>
+
+          <div class="practice-grid">
+
+            <!-- Traductor instantáneo -->
+            <article class="panel" id="translatorPanel">
+              <div class="panel-head">
+                <span class="panel-icon"><i data-lucide="languages"></i></span>
+                <div>
+                  <h3>Traductor Instantáneo</h3>
+                  <p>Español → 8 idiomas, con pronunciación</p>
+                </div>
+              </div>
+
+              <form class="translator-form" id="translatorForm">
+                <label class="field">
+                  <span class="field-label">Texto en español</span>
+                  <textarea id="sourceText" rows="3" placeholder="Escribe una palabra o frase… p. ej. «¿Dónde está la estación?»"></textarea>
+                </label>
+
+                <label class="field">
+                  <span class="field-label">Traducir a</span>
+                  <div class="select-wrap">
+                    <select id="targetLang"><!-- Renderizado por app.js --></select>
+                    <i data-lucide="chevron-down"></i>
+                  </div>
+                </label>
+
+                <div class="translator-actions">
+                  <button class="btn btn-primary" type="submit" id="translateBtn">
+                    <i data-lucide="sparkles"></i> Traducir
+                  </button>
+                  <button class="btn btn-ghost" type="button" id="clearTranslateBtn">
+                    <i data-lucide="eraser"></i> Limpiar
+                  </button>
+                </div>
+              </form>
+
+              <div class="translate-result" id="translateResult" hidden>
+                <div class="result-head">
+                  <span class="result-label"><i data-lucide="arrow-right-left"></i> Resultado</span>
+                  <button class="btn btn-accent btn-sm" type="button" id="speakResultBtn">
+                    <i data-lucide="volume-2"></i> Escuchar
+                  </button>
+                </div>
+                <p class="result-text" id="resultText"></p>
+                <p class="result-note" id="resultNote"></p>
+              </div>
+
+              <p class="panel-foot">
+                <i data-lucide="info"></i> Traducción por <strong>MyMemory API</strong> (8 idiomas) · Audio con la voz del navegador.
+              </p>
+            </article>
+
+            <!-- Mini-Quiz -->
+            <article class="panel" id="quizPanel">
+              <div class="panel-head">
+                <span class="panel-icon"><i data-lucide="circle-help"></i></span>
+                <div>
+                  <h3>Quiz de Idiomas</h3>
+                  <p>8 preguntas · explicación tras cada respuesta</p>
+                </div>
+              </div>
+
+              <div class="quiz-progress">
+                <span class="quiz-progress-bar"><i id="quizBar"></i></span>
+                <span class="quiz-counter" id="quizCounter">Pregunta 1 de 8</span>
+              </div>
+
+              <div id="quizBody"><!-- Renderizado por app.js --></div>
+
+              <div class="quiz-result" id="quizResult" hidden>
+                <span class="quiz-score" id="quizScore">0 / 8</span>
+                <h4 id="quizVerdict">¡Buen intento!</h4>
+                <p id="quizMessage"></p>
+                <button class="btn btn-primary" type="button" id="quizResetBtn">
+                  <i data-lucide="rotate-ccw"></i> Reiniciar quiz
+                </button>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           CULTURA (6 guías)
+      ============================================================= -->
+      <section class="section section-soft" id="cultura">
+        <div class="container">
+          <header class="section-head">
+            <span class="eyebrow"><i data-lucide="landmark"></i> Cultura</span>
+            <h2>6 guías culturales completas</h2>
+            <p>Artículos breves que explican el «por qué» detrás de cada idioma. Abre cualquiera para leerlo completo.</p>
+          </header>
+          <div class="guide-grid" id="guideGrid"><!-- Renderizado por app.js --></div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           FALSOS AMIGOS Y MODISMOS
+      ============================================================= -->
+      <section class="section" id="expresiones">
+        <div class="container">
+          <header class="section-head">
+            <span class="eyebrow"><i data-lucide="triangle-alert"></i> Expresiones</span>
+            <h2>Falsos amigos y modismos</h2>
+            <p>Palabras que parecen una cosa y significan otra, más los modismos que delatan a un nativo.</p>
+          </header>
+          <div class="exp-grid" id="expGrid"><!-- Renderizado por app.js --></div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           PLANES Y SUSCRIPCIONES
+      ============================================================= -->
+      <section class="section section-soft" id="planes">
+        <div class="container">
+          <header class="section-head">
+            <span class="eyebrow"><i data-lucide="credit-card"></i> Suscripciones</span>
+            <h2>Elige el plan que va contigo</h2>
+            <p>Cambia o cancela cuando quieras. Al suscribirte recibirás un correo de confirmación real.</p>
+          </header>
+
+          <div class="billing-toggle" role="group" aria-label="Periodo de facturación">
+            <button class="bill-btn is-active" id="billMonthly" type="button">Mensual</button>
+            <button class="bill-btn" id="billAnnual" type="button">Anual <span class="save-tag" id="saveTag"></span></button>
+          </div>
+
+          <div class="plans-grid" id="plansGrid"><!-- Renderizado por app.js --></div>
+
+          <p class="plans-note">
+            <i data-lucide="shield-check"></i>
+            Pagos simulados para fines demostrativos. No se realiza ningún cobro real.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           ACERCA DEL PROYECTO
+      ============================================================= -->
+      <section class="section" id="acerca">
+        <div class="container">
+          <header class="section-head">
+            <span class="eyebrow"><i data-lucide="info"></i> Acerca del Proyecto</span>
+            <h2>Cómo funciona LinguaCraft por dentro</h2>
+            <p>Un proyecto escolar de preparatoria construido con tecnologías web estándar y APIs gratuitas.</p>
+          </header>
+
+          <div class="about-grid">
+            <article class="about-card">
+              <span class="panel-icon"><i data-lucide="mail-check"></i></span>
+              <h3>EmailJS</h3>
+              <p>Envía correos reales de bienvenida y confirmación de suscripción al Gmail del usuario, directamente desde el navegador y sin backend. Incluye modo simulación si no hay claves configuradas.</p>
+            </article>
+            <article class="about-card">
+              <span class="panel-icon"><i data-lucide="languages"></i></span>
+              <h3>MyMemory API</h3>
+              <p>API REST gratuita de traducción que no requiere clave. Traduce del español a 8 idiomas en tiempo real y devuelve variantes alternativas de cada frase.</p>
+            </article>
+            <article class="about-card">
+              <span class="panel-icon"><i data-lucide="volume-2"></i></span>
+              <h3>Web Speech API</h3>
+              <p>Usa <code>window.speechSynthesis</code>, ya incluida en el navegador, para leer en voz alta el vocabulario y los diálogos con la voz nativa de cada idioma.</p>
+            </article>
+            <article class="about-card">
+              <span class="panel-icon"><i data-lucide="database"></i></span>
+              <h3>localStorage</h3>
+              <p>Guarda tu plan activo, tu racha diaria, la meta de estudio, las tarjetas marcadas para repaso y los cursos completados sin necesidad de una base de datos.</p>
+            </article>
+            <article class="about-card">
+              <span class="panel-icon"><i data-lucide="code-2"></i></span>
+              <h3>HTML5 · CSS3 · JS Vanilla</h3>
+              <p>Sin frameworks: variables CSS, Flexbox y Grid, JavaScript ES6+ con iconos Lucide y tipografía Plus Jakarta Sans. Todo servido como archivos estáticos.</p>
+            </article>
+            <article class="about-card">
+              <span class="panel-icon"><i data-lucide="server"></i></span>
+              <h3>¿Cómo escalaría a un backend real?</h3>
+              <p>Con una API (Node, PHP o Python) y una base de datos se sustituiría localStorage: cuentas de usuario autenticadas, progreso sincronizado entre dispositivos, pagos reales con Stripe o Mercado Pago, y correos enviados desde el servidor.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ============================================================
+         VISTA DE CURSO COMPLETO (course-view)
+    ============================================================= -->
+    <div class="course-view" id="courseView" hidden>
+      <div class="cv-topbar">
+        <div class="cv-topbar-inner">
+          <div class="cv-title-wrap" id="cvTitleWrap">
+            <span style="font-size:1.6rem;line-height:1">🏳️</span>
+            <div>
+              <div class="cv-course-name">Curso</div>
+              <div class="cv-course-lang">Idioma · Nivel</div>
+            </div>
+          </div>
+          <div class="cv-topbar-actions">
+            <button class="btn btn-ghost btn-sm" id="cvBackBtn" type="button" aria-label="Volver al catálogo">
+              <i data-lucide="arrow-left"></i> Volver
+            </button>
+            <span class="cv-progress-label" id="cvProgressLabel">0 / 4 módulos</span>
+            <div class="cv-progress-bar-wrap"><div class="cv-progress-bar" id="cvProgressBar"></div></div>
+          </div>
+        </div>
       </div>
 
-      <nav class="footer-col" aria-label="Enlaces rápidos">
-        <h4>Explorar</h4>
-        <a href="#idiomas">Idiomas</a>
-        <a href="#cursos">Cursos</a>
-        <a href="#estudio">Zona de estudio</a>
-        <a href="#practica">Práctica</a>
-        <a href="#cultura">Cultura</a>
-        <a href="#planes">Planes</a>
+      <nav class="cv-tabs-wrap">
+        <div class="container">
+          <div class="cv-tabs" id="cvTabs"></div>
+        </div>
       </nav>
 
-      <nav class="footer-col" aria-label="Idiomas disponibles">
-        <h4>Idiomas</h4>
-        <a href="#idiomas">🇬🇧 Inglés</a>
-        <a href="#idiomas">🇯🇵 Japonés</a>
-        <a href="#idiomas">🇰🇷 Coreano</a>
-        <a href="#idiomas">🇨🇳 Chino Mandarín</a>
-        <a href="#idiomas">🇲🇽 Náhuatl</a>
-        <a href="#idiomas">🏛️ Latín</a>
-      </nav>
+      <div class="cv-body" id="cvBody"></div>
+    </div>
 
-      <div class="footer-col">
-        <h4>Proyecto escolar</h4>
-        <p class="footer-credit">
-          <i data-lucide="school"></i>
-          LinguaCraft · Proyecto de preparatoria
-        </p>
-        <p class="footer-credit">
-          <i data-lucide="award"></i>
-          10 idiomas · 15 cursos · APIs gratuitas
-        </p>
-        <button class="btn btn-ghost btn-sm" type="button" id="certificateBtn">
-          <i data-lucide="award"></i> Ver certificado
+    <!-- ============================================================
+         FOOTER
+    ============================================================= -->
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div class="footer-brand">
+          <a href="#inicio" class="brand">
+            <span class="brand-mark"><i data-lucide="languages"></i></span>
+            <span class="brand-name">Lingua<span>Craft</span></span>
+          </a>
+          <p>Aprende idiomas y cultura con una experiencia moderna, clara y completamente en español.</p>
+        </div>
+
+        <nav class="footer-col" aria-label="Enlaces rápidos">
+          <h4>Explorar</h4>
+          <a href="#idiomas">Idiomas</a>
+          <a href="#cursos">Cursos</a>
+          <a href="#estudio">Zona de estudio</a>
+          <a href="#practica">Práctica</a>
+          <a href="#cultura">Cultura</a>
+          <a href="#planes">Planes</a>
+        </nav>
+
+        <nav class="footer-col" aria-label="Idiomas disponibles">
+          <h4>Idiomas</h4>
+          <a href="#idiomas">🇬🇧 Inglés</a>
+          <a href="#idiomas">🇯🇵 Japonés</a>
+          <a href="#idiomas">🇰🇷 Coreano</a>
+          <a href="#idiomas">🇨🇳 Chino Mandarín</a>
+          <a href="#idiomas">🇲🇽 Náhuatl</a>
+          <a href="#idiomas">🏛️ Latín</a>
+        </nav>
+
+        <div class="footer-col">
+          <h4>Proyecto escolar</h4>
+          <p class="footer-credit">
+            <i data-lucide="school"></i>
+            LinguaCraft · Proyecto de preparatoria
+          </p>
+          <p class="footer-credit">
+            <i data-lucide="award"></i>
+            10 idiomas · 15 cursos · APIs gratuitas
+          </p>
+          <button class="btn btn-ghost btn-sm" type="button" id="certificateBtn">
+            <i data-lucide="award"></i> Ver certificado
+          </button>
+          <button class="btn btn-danger-ghost btn-sm" type="button" id="resetSubscriptionBtn">
+            <i data-lucide="rotate-ccw"></i> Reiniciar suscripción (Demo)
+          </button>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="container">
+          <p>© <span id="year"></span> LinguaCraft · Hecho con fines educativos. Sin cobros reales.</p>
+          <p class="footer-apis">Traducción: MyMemory API · Correos: EmailJS · Audio: Web Speech API</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ============================================================
+         MODAL DE CURSO
+    ============================================================= -->
+    <div class="modal-overlay" id="courseModal" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="courseModalTitle">
+        <button class="modal-close" type="button" data-close-modal aria-label="Cerrar">
+          <i data-lucide="x"></i>
         </button>
-        <button class="btn btn-danger-ghost btn-sm" type="button" id="resetSubscriptionBtn">
-          <i data-lucide="rotate-ccw"></i> Reiniciar suscripción (Demo)
-        </button>
+        <div class="modal-body" id="courseModalBody"></div>
       </div>
     </div>
 
-    <div class="footer-bottom">
-      <div class="container">
-        <p>© <span id="year"></span> LinguaCraft · Hecho con fines educativos. Sin cobros reales.</p>
-        <p class="footer-apis">Traducción: MyMemory API · Correos: EmailJS · Audio: Web Speech API</p>
+    <!-- ============================================================
+         MODAL DE REGISTRO / SUSCRIPCIÓN
+    ============================================================= -->
+    <div class="modal-overlay" id="signupModal" aria-hidden="true">
+      <div class="modal modal-narrow" role="dialog" aria-modal="true" aria-labelledby="signupTitle">
+        <button class="modal-close" type="button" data-close-modal aria-label="Cerrar">
+          <i data-lucide="x"></i>
+        </button>
+        <div class="modal-body" id="signupModalBody"></div>
       </div>
     </div>
-  </footer>
 
-  <!-- ============================================================
-       MODAL DE CURSO
-  ============================================================= -->
-  <div class="modal-overlay" id="courseModal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="courseModalTitle">
-      <button class="modal-close" type="button" data-close-modal aria-label="Cerrar">
-        <i data-lucide="x"></i>
-      </button>
-      <div class="modal-body" id="courseModalBody"></div>
+    <!-- ============================================================
+         MODAL DE GUÍA CULTURAL
+    ============================================================= -->
+    <div class="modal-overlay" id="guideModal" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="guideModalTitle">
+        <button class="modal-close" type="button" data-close-modal aria-label="Cerrar">
+          <i data-lucide="x"></i>
+        </button>
+        <div class="modal-body" id="guideModalBody"></div>
+      </div>
     </div>
-  </div>
 
-  <!-- ============================================================
-       MODAL DE REGISTRO / SUSCRIPCIÓN
-  ============================================================= -->
-  <div class="modal-overlay" id="signupModal" aria-hidden="true">
-    <div class="modal modal-narrow" role="dialog" aria-modal="true" aria-labelledby="signupTitle">
-      <button class="modal-close" type="button" data-close-modal aria-label="Cerrar">
-        <i data-lucide="x"></i>
-      </button>
-      <div class="modal-body" id="signupModalBody"></div>
+    <!-- ============================================================
+         MODAL DE CERTIFICADO
+    ============================================================= -->
+    <div class="modal-overlay" id="certificateModal" aria-hidden="true">
+      <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="certificateTitle">
+        <button class="modal-close" type="button" data-close-modal aria-label="Cerrar">
+          <i data-lucide="x"></i>
+        </button>
+        <div class="modal-body" id="certificateModalBody"></div>
+      </div>
     </div>
-  </div>
 
-  <!-- ============================================================
-       MODAL DE GUÍA CULTURAL
-  ============================================================= -->
-  <div class="modal-overlay" id="guideModal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="guideModalTitle">
-      <button class="modal-close" type="button" data-close-modal aria-label="Cerrar">
-        <i data-lucide="x"></i>
-      </button>
-      <div class="modal-body" id="guideModalBody"></div>
-    </div>
-  </div>
+    <!-- Contenedor de notificaciones (toasts) -->
+    <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="false"></div>
 
-  <!-- ============================================================
-       MODAL DE CERTIFICADO
-  ============================================================= -->
-  <div class="modal-overlay" id="certificateModal" aria-hidden="true">
-    <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="certificateTitle">
-      <button class="modal-close" type="button" data-close-modal aria-label="Cerrar">
-        <i data-lucide="x"></i>
-      </button>
-      <div class="modal-body" id="certificateModalBody"></div>
-    </div>
-  </div>
-
-  <!-- Contenedor de notificaciones (toasts) -->
-  <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="false"></div>
-
-  <!-- Librerías por CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script src="data.js"></script>
-  <script src="app.js"></script>
-</body>
+    <!-- Librerías por CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="data.js"></script>
+    <script src="features.js"></script>
+    <script src="app.js"></script>
+  </body>
 </html>
